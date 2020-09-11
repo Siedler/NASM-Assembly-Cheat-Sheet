@@ -1,0 +1,917 @@
+<html><head>
+
+<style>
+/*
+ * Copyright (c) 2013 Chris Patuzzo <chris@patuzzo.co.uk>
+ * 
+ * The "github.css" Style Sheet by Chris Patuzzo <chris@patuzzo.co.uk>
+ * is available from http://www.github.com/tuzz.
+ */
+ /*
+  * Copyright (c) 2014-2016 wereturtle
+  * 
+  * Modifications made to the hr element style.
+  */
+/*
+ * kbd element style lifted from style sheet provided by Sindre Sorhus at
+ * https://github.com/sindresorhus/github-markdown-css.
+ *
+ * License for that style sheet is provided below.
+ */
+/*
+ * The MIT License (MIT)
+ *
+ * Copyright (c) Sindre Sorhus <sindresorhus@gmail.com> (sindresorhus.com)
+ *
+ * Permission is hereby granted, free of charge, to any person obtaining a copy
+ * of this software and associated documentation files (the "Software"), to deal
+ * in the Software without restriction, including without limitation the rights
+ * to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
+ * copies of the Software, and to permit persons to whom the Software is
+ * furnished to do so, subject to the following conditions:
+ * 
+ * The above copyright notice and this permission notice shall be included in
+ * all copies or substantial portions of the Software.
+ * 
+ * THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+ * IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+ * FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
+ * AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+ * LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
+ * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
+ * THE SOFTWARE.
+ */
+ 
+body {
+  font-family: Helvetica, arial, sans-serif;
+  font-size: 14px;
+  line-height: 1.6;
+  padding-top: 10px;
+  padding-bottom: 10px;
+  background-color: white;
+  padding: 30px;
+  color: #333;
+}
+ 
+body > *:first-child {
+  margin-top: 0 !important;
+}
+ 
+body > *:last-child {
+  margin-bottom: 0 !important;
+}
+ 
+a {
+  color: #4183C4;
+  text-decoration: none;
+}
+ 
+a.absent {
+  color: #cc0000;
+}
+ 
+a.anchor {
+  display: block;
+  padding-left: 30px;
+  margin-left: -30px;
+  cursor: pointer;
+  position: absolute;
+  top: 0;
+  left: 0;
+  bottom: 0;
+}
+ 
+h1, h2, h3, h4, h5, h6 {
+  margin: 20px 0 10px;
+  padding: 0;
+  font-weight: bold;
+  -webkit-font-smoothing: antialiased;
+  cursor: text;
+  position: relative;
+}
+ 
+h2:first-child, h1:first-child, h1:first-child + h2, h3:first-child, h4:first-child, h5:first-child, h6:first-child {
+  margin-top: 0;
+  padding-top: 0;
+}
+ 
+h1:hover a.anchor, h2:hover a.anchor, h3:hover a.anchor, h4:hover a.anchor, h5:hover a.anchor, h6:hover a.anchor {
+  text-decoration: none;
+}
+ 
+h1 tt, h1 code {
+  font-size: inherit;
+}
+ 
+h2 tt, h2 code {
+  font-size: inherit;
+}
+ 
+h3 tt, h3 code {
+  font-size: inherit;
+}
+ 
+h4 tt, h4 code {
+  font-size: inherit;
+}
+ 
+h5 tt, h5 code {
+  font-size: inherit;
+}
+ 
+h6 tt, h6 code {
+  font-size: inherit;
+}
+ 
+h1 {
+  font-size: 28px;
+  color: black;
+}
+ 
+h2 {
+  font-size: 24px;
+  border-bottom: 1px solid #cccccc;
+  color: black;
+}
+ 
+h3 {
+  font-size: 18px;
+}
+ 
+h4 {
+  font-size: 16px;
+}
+ 
+h5 {
+  font-size: 14px;
+}
+ 
+h6 {
+  color: #777777;
+  font-size: 14px;
+}
+ 
+p, blockquote, ul, ol, dl, li, table, pre {
+  margin: 15px 0;
+}
+ 
+hr {
+  border: 1px none;
+  color: #cccccc;
+  background-color: #cccccc;
+  height: 1px;
+}
+ 
+body > h2:first-child {
+  margin-top: 0;
+  padding-top: 0;
+}
+ 
+body > h1:first-child {
+  margin-top: 0;
+  padding-top: 0;
+}
+ 
+body > h1:first-child + h2 {
+  margin-top: 0;
+  padding-top: 0;
+}
+ 
+body > h3:first-child, body > h4:first-child, body > h5:first-child, body > h6:first-child {
+  margin-top: 0;
+  padding-top: 0;
+}
+ 
+a:first-child h1, a:first-child h2, a:first-child h3, a:first-child h4, a:first-child h5, a:first-child h6 {
+  margin-top: 0;
+  padding-top: 0;
+}
+ 
+h1 p, h2 p, h3 p, h4 p, h5 p, h6 p {
+  margin-top: 0;
+}
+ 
+li p.first {
+  display: inline-block;
+}
+ 
+ul, ol {
+  padding-left: 30px;
+}
+ 
+ul :first-child, ol :first-child {
+  margin-top: 0;
+}
+ 
+ul :last-child, ol :last-child {
+  margin-bottom: 0;
+}
+ 
+dl {
+  padding: 0;
+}
+ 
+dl dt {
+  font-size: 14px;
+  font-weight: bold;
+  font-style: italic;
+  padding: 0;
+  margin: 15px 0 5px;
+}
+ 
+dl dt:first-child {
+  padding: 0;
+}
+ 
+dl dt > :first-child {
+  margin-top: 0;
+}
+ 
+dl dt > :last-child {
+  margin-bottom: 0;
+}
+ 
+dl dd {
+  margin: 0 0 15px;
+  padding: 0 15px;
+}
+ 
+dl dd > :first-child {
+  margin-top: 0;
+}
+ 
+dl dd > :last-child {
+  margin-bottom: 0;
+}
+ 
+blockquote {
+  border-left: 4px solid #dddddd;
+  padding: 0 15px;
+  color: #777777;
+}
+ 
+blockquote > :first-child {
+  margin-top: 0;
+}
+ 
+blockquote > :last-child {
+  margin-bottom: 0;
+}
+ 
+table {
+  padding: 0;
+}
+table tr {
+  border-top: 1px solid #cccccc;
+  background-color: white;
+  margin: 0;
+  padding: 0;
+}
+ 
+table tr:nth-child(2n) {
+  background-color: #f8f8f8;
+}
+ 
+table tr th {
+  font-weight: bold;
+  border: 1px solid #cccccc;
+  text-align: left;
+  margin: 0;
+  padding: 6px 13px;
+}
+ 
+table tr td {
+  border: 1px solid #cccccc;
+  text-align: left;
+  margin: 0;
+  padding: 6px 13px;
+}
+ 
+table tr th :first-child, table tr td :first-child {
+  margin-top: 0;
+}
+ 
+table tr th :last-child, table tr td :last-child {
+  margin-bottom: 0;
+}
+ 
+img {
+  max-width: 100%;
+}
+ 
+span.frame {
+  display: block;
+  overflow: hidden;
+}
+ 
+span.frame > span {
+  border: 1px solid #dddddd;
+  display: block;
+  float: left;
+  overflow: hidden;
+  margin: 13px 0 0;
+  padding: 7px;
+  width: auto;
+}
+ 
+span.frame span img {
+  display: block;
+  float: left;
+}
+ 
+span.frame span span {
+  clear: both;
+  color: #333333;
+  display: block;
+  padding: 5px 0 0;
+}
+ 
+span.align-center {
+  display: block;
+  overflow: hidden;
+  clear: both;
+}
+ 
+span.align-center > span {
+  display: block;
+  overflow: hidden;
+  margin: 13px auto 0;
+  text-align: center;
+}
+ 
+span.align-center span img {
+  margin: 0 auto;
+  text-align: center;
+}
+ 
+span.align-right {
+  display: block;
+  overflow: hidden;
+  clear: both;
+}
+ 
+span.align-right > span {
+  display: block;
+  overflow: hidden;
+  margin: 13px 0 0;
+  text-align: right;
+}
+ 
+span.align-right span img {
+  margin: 0;
+  text-align: right;
+}
+ 
+span.float-left {
+  display: block;
+  margin-right: 13px;
+  overflow: hidden;
+  float: left;
+}
+ 
+span.float-left span {
+  margin: 13px 0 0;
+}
+ 
+span.float-right {
+  display: block;
+  margin-left: 13px;
+  overflow: hidden;
+  float: right;
+}
+ 
+span.float-right > span {
+  display: block;
+  overflow: hidden;
+  margin: 13px auto 0;
+  text-align: right;
+}
+ 
+code, tt {
+  margin: 0 2px;
+  padding: 0 5px;
+  white-space: nowrap;
+  border: 1px solid #eaeaea;
+  background-color: #f8f8f8;
+  border-radius: 3px;
+}
+ 
+pre code {
+  margin: 0;
+  padding: 0;
+  white-space: pre;
+  border: none;
+  background: transparent;
+}
+ 
+.highlight pre {
+  background-color: #f8f8f8;
+  border: 1px solid #cccccc;
+  font-size: 13px;
+  line-height: 19px;
+  overflow: auto;
+  padding: 6px 10px;
+  border-radius: 3px;
+}
+ 
+pre {
+  background-color: #f8f8f8;
+  border: 1px solid #cccccc;
+  font-size: 13px;
+  line-height: 19px;
+  overflow: auto;
+  padding: 6px 10px;
+  border-radius: 3px;
+}
+ 
+pre code, pre tt {
+  background-color: transparent;
+  border: none;
+}
+
+kbd {
+  display: inline-block;
+  padding: 3px 5px;
+  font-size: 11px;
+  line-height: 10px;
+  color: #555;
+  vertical-align: middle;
+  background-color: #fcfcfc;
+  border: solid 1px #ccc;
+  border-bottom-color: #bbb;
+  border-radius: 3px;
+  box-shadow: inset 0 -1px 0 #bbb;
+}
+</style>
+
+<title></title></head><body><h1>Assembly-Cheat-Sheet:</h1>
+
+<h2>Register:</h2>
+
+<table style="background-color: #f8f9fa;color: #202122;margin: 1em 0;border: 1px solid #a2a9b1;border-collapse: collapse;"><tbody><tr><th>Register</th><th style="width: 12%;" colspan="8">Accumulator</th><th style="width: 12%;" colspan="8">Counter</th><th style="width: 12%;" colspan="8">Data</th><th style="width: 12%;" colspan="8">Base</th><th style="width: 12%;" colspan="8">Stack Pointer</th><th style="width: 12%;" colspan="8">Stack Base Pointer</th><th style="width: 12%;" colspan="8">Source</th><th style="width: 12%;" colspan="8">Destination</th></tr><tr style="text-align: center;"><th scope="row">64-bit</th><td colspan="8">RAX</td><td colspan="8">RCX</td><td colspan="8">RDX</td><td colspan="8">RBX</td><td colspan="8">RSP</td><td colspan="8">RBP</td><td colspan="8">RSI</td><td colspan="8">RDI</td></tr><tr style="text-align: center;"><th scope="row">32-bit</th><td style="width: 6%;" colspan="4"></td><td style="width: 6%;" colspan="4">EAX</td><td style="width: 6%;" colspan="4"></td><td style="width: 6%;" colspan="4">ECX</td><td style="width: 6%;" colspan="4"></td><td style="width: 6%;" colspan="4">EDX</td><td style="width: 6%;" colspan="4"></td><td style="width: 6%;" colspan="4">EBX</td><td style="width: 6%;" colspan="4"></td><td style="width: 6%;" colspan="4">ESP</td><td style="width: 6%;" colspan="4"></td><td style="width: 6%;" colspan="4">EBP</td><td style="width: 6%;" colspan="4"></td><td style="width: 6%;" colspan="4">ESI</td><td style="width: 6%;" colspan="4"></td><td style="width: 6%;" colspan="4">EDI</td></tr><tr style="text-align: center;"><th scope="row">16-bit</th><td style="width: 9%;" colspan="6"></td><td style="width: 3%;" colspan="2">AX</td><td style="width: 9%;" colspan="6"></td><td style="width: 3%;" colspan="2">CX</td><td style="width: 9%;" colspan="6"></td><td style="width: 3%;" colspan="2">DX</td><td style="width: 9%;" colspan="6"></td><td style="width: 3%;" colspan="2">BX</td><td style="width: 9%;" colspan="6"></td><td style="width: 3%;" colspan="2">SP</td><td style="width: 9%;" colspan="6"></td><td style="width: 3%;" colspan="2">BP</td><td style="width: 9%;" colspan="6"></td><td style="width: 3%;" colspan="2">SI</td><td style="width: 9%;" colspan="6"></td><td style="width: 3%;" colspan="2">DI</td></tr><tr style="text-align: center;"><th scope="row">8-bit</th><td style="width: 9%;" colspan="6"></td><td style="width: 1.5%;" colspan="1">AH</td><td style="width: 1.5%;" colspan="1">AL</td><td style="width: 9%;" colspan="6"></td><td style="width: 1.5%;" colspan="1">CH</td><td style="width: 1.5%;" colspan="1">CL</td><td style="width: 9%;" colspan="6"></td><td style="width: 1.5%;" colspan="1">DH</td><td style="width: 1.5%;" colspan="1">DL</td><td style="width: 9%;" colspan="6"></td><td style="width: 1.5%;" colspan="1">BH</td><td style="width: 1.5%;" colspan="1">BL</td><td style="width: 9%;" colspan="7"></td><td style="width: 1.5%;" colspan="1">SPL</td><td style="width: 9%;" colspan="7"></td><td style="width: 1.5%;" colspan="1">BPL</td><td style="width: 9%;" colspan="7"></td><td style="width: 1.5%;" colspan="1">SIL</td><td style="width: 9%;" colspan="7"></td><td style="width: 1.5%;" colspan="1">DIL</td></tr></tbody><caption></caption></table>
+
+<h3>Eingabe-Register</h3>
+
+<p>Funktionsparameter werden in folgenden Registern übermittelt:</p>
+
+<table><thead>
+<tr>
+<th><span></th>
+<th><span></th>
+<th><span></th>
+<th><span></th>
+<th><span></th>
+<th><span></th>
+<th><span></th>
+<th><span></th>
+</tr>
+</thead><tbody>
+<tr>
+<td>Parameter Nummer</td>
+<td>1</td>
+<td>2</td>
+<td>3</td>
+<td>4</td>
+<td>5</td>
+<td>6</td>
+<td>7+</td>
+</tr>
+<tr>
+<td>Register</td>
+<td>rdi</td>
+<td>rsi</td>
+<td>rdx</td>
+<td>rcx</td>
+<td>r8</td>
+<td>r9</td>
+<td>Stack</td>
+</tr>
+</tbody></table>
+
+<h3>Rückgabe-Register</h3>
+
+<p>Der Rückgabewert einer Funktion steht im <strong>rax</strong> Register. Achtet dabei darauf, dass ihr euer Ergebnis immer ins rax Register schreibt.</p>
+
+<h3>Volatile- vs Non-Volatile-Registers:</h3>
+
+<p>Nach Calling-Convention werden die Register in 2 Kategorien eingeteilt: Volatile und Non-Volatile. Non-Volatile-Register behalten, nach Calling-Convention, nach einem Funktionsaufruf ihren Wert. D.h. wir müssen uns nicht um die Sicherung dieser Register kümmern, wenn wir eine weitere Funktion aufrufen. Dies bedeutet aber auch automatisch, dass wir diese Register auf dem Stack sichern müssen (PUSH), wenn wir sie verwenden wollen, und sie wiederherstellen (POP) bevor unsere Funktion beendet.
+Volatile-Register auf der anderen Seite verhalten sich genau andersherum: Wir dürfen die Wert die dort gespeichert sind verändern, ohne uns um eine Sicherung Gedanken machen zu müssen. Wollen wir jedoch ihren Wert über einen weiteren Funktionsaufruf behalten, müssen wir sie manuell vor dem Aufruf sichern.</p>
+
+<table><thead>
+<tr>
+<th>Register</th>
+<th>Volatile</th>
+<th>Non-Volatile</th>
+</tr>
+</thead><tbody>
+<tr>
+<td>rax</td>
+<td>X</td>
+<td></td>
+</tr>
+<tr>
+<td>rbx</td>
+<td></td>
+<td>X</td>
+</tr>
+<tr>
+<td>rcx</td>
+<td>X</td>
+<td></td>
+</tr>
+<tr>
+<td>rdx</td>
+<td>X</td>
+<td></td>
+</tr>
+<tr>
+<td>rsp</td>
+<td></td>
+<td>X</td>
+</tr>
+<tr>
+<td>rbp</td>
+<td></td>
+<td>X</td>
+</tr>
+<tr>
+<td>rsi</td>
+<td>X</td>
+<td></td>
+</tr>
+<tr>
+<td>rdi</td>
+<td>X</td>
+<td></td>
+</tr>
+<tr>
+<td>r8-r11</td>
+<td>X</td>
+<td></td>
+</tr>
+<tr>
+<td>r12-r15</td>
+<td></td>
+<td>X</td>
+</tr>
+</tbody></table>
+
+<h2>Befehle</h2>
+
+<h3>Bewegung von Daten:</h3>
+
+<h4>MOV reg (to), value / MOV reg (to), reg (from):</h4>
+
+<p>Definition: Verschiebe ein Wert bzw. den Wert eines Registers in ein weiteres Register.</p>
+
+<p>Beispiel:</p>
+
+<pre><code>MOV rax, rdx ; Verschiebe Wert von rdx in rax (ergo rax = rdx)
+MOV rsi, 2   ; Verschiebe die Zahl 2 in das Register rsi (ergo rsi = 2)
+</code></pre>
+
+<h4>SHL reg (value 1), value / SHL reg (value 1), reg (value 2)</h4>
+
+<p>Definition: Shifte den Wert des Registers um n Stellen nach Links. Bits die nach Links &ldquo;rausgeschoben&rdquo; werden gehen verloren</p>
+
+<p>Beispiel:</p>
+
+<pre><code>SHL rax, rdx ; Verschiebe alle Bits von rax um n-Stellen (Entsprechend des Wertes aus rdx)
+SHL rax, 1   ; Verschiebe alle Bits 
+</code></pre>
+
+<p>Beispiel under the hood:</p>
+
+<pre><code>rax = 1100 0011
+
+SHL rax, 1
+
+=&gt; rax = 1000 0110
+</code></pre>
+
+<h4>SHR reg (value 1), value / SHR reg (value 1), reg (value 2)</h4>
+
+<p>Definition: Shifte den Wert des Registers um n Stellen nach Rechts. Also analog zu SHL</p>
+
+<p>Beispiel:</p>
+
+<pre><code>SHR rax, rdx
+SHR rax, 1
+</code></pre>
+
+<h4>ROL reg (value 1), value / ROL reg (value 1), reg (value 2)</h4>
+
+<p>Definition: Rotiere die Werte um n Stelle. Dies ist Analog zu SHL jedoch gehen hier die Bits die nach links raus geschoben werden nicht verloren, sondern werden rechts hinzugefügt.</p>
+
+<p>Beispiel:</p>
+
+<pre><code>ROL rax, rdx
+ROL rax, 1
+</code></pre>
+
+<p>Beispiel under the hood:</p>
+
+<pre><code>rax = 1100 0100
+
+ROL rax, 1
+=&gt; rax = 1000 1001
+</code></pre>
+
+<h4>ROR reg (value 1), value / ROR reg (value 1), reg (value 2)</h4>
+
+<p>Definition: Rotiere die Werte um n Stellen nach Rechts. Also analog zu ROL</p>
+
+<p>Beispiel:</p>
+
+<pre><code>ROR rax, rdx
+ROR rax, 1
+</code></pre>
+
+<h3>Bit-Operationen:</h3>
+
+<h4>AND reg (value 1), value / AND reg (value 1), reg (value 2)</h4>
+
+<p>Definition: Wendet das logische UND mit dem Wert des zweiten Parameters auf den Wert des ersten Registers an und speichert das Ergebnis im ersten Register.</p>
+
+<p>Beispiel:</p>
+
+<pre><code>AND rax, rsi ; Verunde den Wert aus rax mit dem Wert aus rsi
+AND rax, 0x1 ; Verunde den Wert aus rax mit dem Wert 0x1 (Hexadezimal-Zahl)
+</code></pre>
+
+<p>Beispiel under the hood:</p>
+
+<pre><code>rax = 0101 1101
+rsi = 1101 1011
+
+AND rax, rsi = 0101 1101 AND 1101 1011
+
+0101 1101
+1001 1011
+---------
+0001 1001 = rax
+</code></pre>
+
+<h4>OR reg (value 1), value / OR reg (value 1), reg (value 2)</h4>
+
+<p>Definition: Wende das logische ODER mit dem Wert des zweiten Parameters auf das erste Register an und speichert das Ergebnis im ersten Register.</p>
+
+<p>Beispiel:</p>
+
+<pre><code>OR rax, rsi ; Veroder den Wert aus rax mit dem Wert aus rsi
+OR rdx, 0xF ; Veroder den Wert aus rdx mit dem Wert 0xF (Binär = 1111)
+</code></pre>
+
+<p>Beispiel under the hood:</p>
+
+<pre><code>rdx = 0011 1101
+0xF = 0000 1101
+
+OR rdx, 0xF = 0011 1101 OR 0000 1101
+
+0011 1101
+0000 1101
+---------
+0011 1101 = rdx
+</code></pre>
+
+<h4>XOR reg (value 1), value / XOR reg (value 1), reg (value 2):</h4>
+
+<p>Definition: Wendet das logische XOR mit dem Wert des zweiten Parameters auf den Wert des ersten Registers an.</p>
+
+<p>Beispiel:</p>
+
+<pre><code>XOR rax, rsi  ; Wendet XOR auf den Wert von rax mit dem Wert von rsi an
+XOR rdx, 0x8F ; Wendet XOR auf den Wert von rdx mit 0x8F (Binär = 1000 1111) an
+</code></pre>
+
+<p>Beispiel under the hood:</p>
+
+<pre><code>rdx  = 0011 1011
+0xFF = 1000 1111
+
+XOR rdx, 0x8F
+
+0011 1011
+1000 1111
+---------
+0000 1011 = rdx
+</code></pre>
+
+<h3>Arithmetische-Operationen:</h3>
+
+<h4>NEG reg (value 1):</h4>
+
+<p>Definition: Negiere den Wert aus dem gegebenen Register (in 2k)</p>
+
+<p>Beispiel:</p>
+
+<pre><code>NEG rsi ; Negiere den Wert in rsi
+</code></pre>
+
+<h4>ADD reg (value 1), value / ADD reg (value 1), reg (value 2):</h4>
+
+<p>Definition: Addiere einen Wert bzw. den Wert eines Registers auf den Wert eines anderen Registers.</p>
+
+<p>Beispiel:</p>
+
+<pre><code>ADD rax, rdx ; Addiere Wert von rdx auf rax und Speicher Ergebnis in rax (rax = rax + rdx)
+ADD rsi, 2   ; Addiere die Zahl 2 auf rsi und Speicher Ergebnis in rsi (rsi = rsi + 2)
+</code></pre>
+
+<h4>SUB reg (value 1), value / SUB reg (value 1), reg (value 2):</h4>
+
+<p>Definition: Analog zu Add jedoch als Subtraktion</p>
+
+<p>Beispiele:</p>
+
+<pre><code>SUB rax, rdx ; Subtrahiere von rax den Wert von rdx und speichere das Ergebnis in rax (rax = rax - rdx)
+SUB rsi, 2   ; Subtrahiere von rsi den Wert 2 (rsi = rsi - 2)
+</code></pre>
+
+<h4>MUL reg (value 1):</h4>
+
+<p>Definition: Multipliziere den Wert in Register rax mit dem Wert des angegebenen Registers. Das Ergebnis wird in die <em>beiden (!!!)</em> Register rax und rdx gespeichert (rdx, falls ein Überlauf der Zahl in rax passiert)</p>
+
+<p>Beispiel:</p>
+
+<pre><code>MUL rsi ; Multipliziere den Wert in rax mit dem Wert aus rsi und speichere das Ergebnis in (rdx) rax
+</code></pre>
+
+<p>ACHTUNG: Dieser Befehl kann nicht mit einem Wert genutzt werden. Falls man das Register rax mit einem bestimmten Wert multiplizieren möchte muss man diesen vorher in ein Register verschieben:</p>
+
+<pre><code>MOV rsi, 3
+MUL rsi    ; Multipliziere rax mit 3
+</code></pre>
+
+<h4>DIV reg (value 1):</h4>
+
+<p>Definition: Dividiere den Wert aus rdx:rax (rdx konkateniert mit rax) durch den Wert aus dem angegebenen Register. Ergebnis wird in rax (ganzzahlige Division) und rdx (Rest) gespeichert</p>
+
+<p>Beispiel:</p>
+
+<pre><code>DIV rsi ; Dividiert rdx:rax durch den Wert in rsi. Rest wird in rdx gespeichert und Wert der ganzzahligen Division in rax
+</code></pre>
+
+<p>ACHTUNG: Prüfe vor der Division, ob der Wert, der sich in rdx befindet, korrekt ist. Dort könnte sich 1. ein Wert befinden, der nichts mit der gewollten Rechnung zu tun hat und 2. ein Wert drin befinden der nach der Division erhalten bleiben sollte.</p>
+
+<h4>IMUL reg (value 1) und IDIV reg (value 1):</h4>
+
+<p>Definition: Analog zu MUL/DIV, aber mit signed Zahlen (d.h. Zahlen mit Vorzeichen)</p>
+
+<h3>Vergleiche/Sprünge und Bedinge Sprünge:</h3>
+
+<h4>CMP reg (value 1), value / CMP reg (value 1), reg (value 2):</h4>
+
+<p>Definition: Vergleiche ein Register mit einem Wert bzw. mit dem Wert eines weiteren Registers. Diese Operation setzt Bits im Flag-Register die später für Bedingte-Sprünge verwendet werden könnten</p>
+
+<p>Beispiel:</p>
+
+<pre><code>CMP rax, rsi ; Vergleiche rax mit dem Wert aus rsi
+CMP rax, 2   ; Vergleiche rax mit dem Wert 2
+</code></pre>
+
+<h4>JMP some-lable:</h4>
+
+<p>Definition: Setze den Programm Counter (PC) auf die Adresse des angegebenen Lable (some_lable)</p>
+
+<p>Beispiel:</p>
+
+<pre><code>[...]
+JMP .some_lable
+[...]
+
+.some_lable:
+[Do something]
+</code></pre>
+
+<h4>JL some-lable / JB some-lable / JG some-lable / JA some-lable / JE some-lable / JNE some-lable &hellip;</h4>
+
+<p>Definition: Springe, wenn ein bestimmtes Bit im Flag-Register gesetzt ist. Vor dieser Operation sollte ein <em>CMP reg1, reg2</em> oder <em>CMP reg1, value</em> stattgefunden haben!</p>
+
+<table><thead>
+<tr>
+<th>Sprung Bezeichnung</th>
+<th>Bedeutung</th>
+</tr>
+</thead><tbody>
+<tr>
+<td>JE</td>
+<td>&ldquo;Jump equal&rdquo; - Springe, wenn die Werte des CMP die selben sind</td>
+</tr>
+<tr>
+<td>JNE</td>
+<td>&ldquo;Jump not equal&rdquo; - Springe wenn die Werte des CMP nicht die selben sind</td>
+</tr>
+<tr>
+<td>JL</td>
+<td>&ldquo;Jump less&rdquo; - Springe wenn reg1 &lt; reg2 oder reg1 &lt; value (signed number)</td>
+</tr>
+<tr>
+<td>JG</td>
+<td>&ldquo;Jump greater&rdquo; - Springe wenn reg 1 &gt; reg 2 oder reg 1 &gt; value (signed number)</td>
+</tr>
+<tr>
+<td>JB</td>
+<td>&ldquo;Jump above&rdquo; - Springe wenn reg 1 &lt; reg 2 oder reg 1 &lt; value (unsigned number)</td>
+</tr>
+<tr>
+<td>JA</td>
+<td>&ldquo;Jump below&rdquo; - Springe wenn reg 1 &gt; reg 2 oder reg 1 &gt; value (unsigned number)</td>
+</tr>
+<tr>
+<td>JLE / JGE / &hellip;</td>
+<td>&ldquo;Jump less equal&rdquo; / &ldquo;Jump greater equal&rdquo; - Analog zu den Sprüngen oben nur mit equal</td>
+</tr>
+</tbody></table>
+
+<p>Beispiele:</p>
+
+<pre><code>[...]
+CMP rax, 2
+JL .some_lable
+; execute here if rax &gt;= 2
+[...]
+
+.some_lable:
+; execute here if rax &lt; 2
+</code></pre>
+
+<h4>TEST reg (value 1), value / TEST reg (value 1), reg (value 2):</h4>
+
+<p>Definition: Führt ein logisches und auf das erste Register mit dem Wert des zweiten Registers bzw. dem angegebenen Wert aus. Das Ergebnis wird verworfen, doch die Flags: SF (signed flag gibt an ob es sich um eine negative Zahl handelt), ZF (zero flag gibt an ob das Ergebnis die Zahl 0 repräsentiert), PF (parity flag gibt an ob das Ergebnis gerade/ungerade ist &lt;=&gt; ob das letzte Bit gesetzt ist).</p>
+
+<p>Anmerkungen:</p>
+
+<ul>
+<li>JE/JZ testet, ob das ZF-Bit gesetzt ist. Also wenn hier die Verundung das Ergebnis 0 ergab</li>
+</ul>
+
+<h2>Assembly-Tricks:</h2>
+
+<h4>Ein Register bereinigen / auf 0 setzen</h4>
+
+<p>Um den Wert eines Registers auf 0 zu setzen könnt ihr einfach die Zahl 0 in das jeweilige Register setzen:</p>
+
+<pre><code>MOV rax, 0 ; Setze rax = 0
+</code></pre>
+
+<p>Optional hierzu könnt ihr die XOR-Bit-Operation nutzen. Da XOR ein gegebenen Bit auf 0 setze &lt;=&gt; beide Register-Einträge sind 0 ODER beide Registereinträge sind 1 folgt daraus, dass ein XOR mit dem selben Wert das jeweilige Register auf 0 setzen wird. Dies hat also den selben Effekt wie ein MOV Befehl ist jedoch aus Implementierungsgründen effizienter.</p>
+
+<pre><code>XOR rax, rax ; Setze rax = 0
+
+e.g rax = 1101 1111
+
+XOR rax, rax
+=&gt;
+1101 1111
+1101 1111
+---------
+0000 0000 
+</code></pre>
+
+<h4>Ganzzahlige Multiplikation/Division um eine zweier Potenz</h4>
+
+<p>&hellip;.</p>
+
+<h2>How-To-Compile:</h2>
+
+<p>Wir stellen euch zu jeder Assembly-Aufgabe einen C-Wrapper zur Verfügung. Keine Sorge, den müsst ihr noch nicht verstehen.</p>
+
+<p>Da Assembly eine menschenlesbare Version von Maschinen-Code ist muss diese zunächst Compiled/Übersetzt werden. Dazu erstellt ihr zunächst mit Hilfe von NASM eine .o Datei aus eurem Assembly-Code:</p>
+
+<pre><code>&gt;&gt; nasm -f elf64 -o PROGRAMM_NAME.o PROGRAMM_NAME.asm
+</code></pre>
+
+<p>Die Flag &ldquo;-f elf64&rdquo; teilt NASM mit, dass die Ausgabe für x64 Linux Übersetzt werden soll.</p>
+
+<p>Nun müsst ihr auch den C-Wrapper compilieren und eine weitere &ldquo;.o&rdquo; Datei erzeugen:</p>
+
+<pre><code>&gt;&gt; cc -O2 -c -o PROGRAMM_NAME_wrapper.o PROGRAMM_NAME_wrapper.c
+</code></pre>
+
+<p>Die Flag -O2 teilt unserem Compiler mit, dass wir die Optimierungsstufe 2 nutzen wollen (automatische Optimierung unseres C-Codes).</p>
+
+<p>Anschließend müssen wir noch beide &ldquo;.o&rdquo; Datein verlinken:</p>
+
+<pre><code>&gt;&gt; cc -o PROGRAMM_NAME PROGRAMM_NAME_wrapper.o PROGRAMM_NAME.o
+</code></pre>
+
+<p>Abschließend solltet ihr eine Datei &ldquo;PROGRAMM_NAME&rdquo; besitzen. Diese könnt ihr wie folgt ausführen:</p>
+
+<pre><code>&gt;&gt; ./PRGRAMM_NAMME [parameter 1] [parameter 2] [parameter 3] ...+
+</code></pre>
+
+<p>Alternativ könnt ihr auch einfach die gegebene MAKEFILE nutzen</p>
+
+<pre><code>&gt;&gt; make
+</code></pre>
+
+<h2>Quellen:</h2>
+
+<p>https://en.wikibooks.org/wiki/X86<em>Assembly/X86</em>Architecture</p>
+
+<p>https://en.wikipedia.org/wiki/X86<em>calling</em>conventions</p>
+
+<p>https://stackoverflow.com/questions/18024672/what-registers-are-preserved-through-a-linux-x86-64-function-call</p>
+</body></html>
