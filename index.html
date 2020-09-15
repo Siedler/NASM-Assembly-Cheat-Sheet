@@ -124,13 +124,13 @@ Volatile-Register auf der anderen Seite verhalten sich genau andersherum: Wir dü
 MOV rsi, 2   ; Verschiebe die Zahl 2 in das Register rsi (ergo rsi = 2)
 </code></pre>
 
-<h4>SHL reg (value 1), value / SHL reg (value 1), reg (value 2)</h4>
+<h4>SHL reg (value 1), value / SHL reg (value 1), cl</h4>
 
 <p>Definition: Shifte den Wert des Registers um n Stellen nach Links. Bits die nach Links &ldquo;rausgeschoben&rdquo; werden gehen verloren</p>
 
 <p>Beispiel:</p>
 
-<pre><code>SHL rax, rdx ; Verschiebe alle Bits von rax um n-Stellen (Entsprechend des Wertes aus rdx)
+<pre><code>SHL rax, cl ; Verschiebe alle Bits von rax um n-Stellen (Entsprechend des Wertes aus cl)
 SHL rax, 1   ; Verschiebe alle Bits 
 </code></pre>
 
@@ -143,15 +143,19 @@ SHL rax, 1
 =&gt; rax = 1000 0110
 </code></pre>
 
-<h4>SHR reg (value 1), value / SHR reg (value 1), reg (value 2)</h4>
+<p>ACHTUNG: Sowohl SHR, als auch SHL nutzen können nur das Register cl als Registerverschiebungswert nehmen! Dies ist dadurch begründet, dass bei der Entwicklung eines x86-Chips nur eine Verbindung des Count-Registers (cl) angelegt wurde für Verschiebungen.</p>
+
+<h4>SHR reg (value 1), value / SHR reg (value 1), cl</h4>
 
 <p>Definition: Shifte den Wert des Registers um n Stellen nach Rechts. Also analog zu SHL</p>
 
 <p>Beispiel:</p>
 
-<pre><code>SHR rax, rdx
+<pre><code>SHR rax, cl
 SHR rax, 1
 </code></pre>
+
+<p>ACHTUNG: Sowohl SHR, als auch SHL nutzen können nur das Register cl als Registerverschiebungswert nehmen! Dies ist dadurch begründet, dass bei der Entwicklung eines x86-Chips nur eine Verbindung des Count-Registers (cl) angelegt wurde für Verschiebungen.</p>
 
 <h4>ROL reg (value 1), value / ROL reg (value 1), reg (value 2)</h4>
 
@@ -511,6 +515,21 @@ XOR rax, rax
 <p>Alternativ könnt ihr auch einfach die gegebene MAKEFILE nutzen</p>
 
 <pre><code>&gt;&gt; make
+</code></pre>
+
+<h2>Debugging with gdb:</h2>
+
+<p>Um Einblick in die Ausführung des ASM-Codes zu bekommen kann man gdb verwenden. Hierzu findet ihr eine kleine Zusammenfassung von Befehlen zur Ausführung des gdb mit einer UI:</p>
+
+<pre><code>&gt;&gt; gdb PROGRAMM_NAME                    Lade deinen code in gdb
+&gt;&gt; break SOME_LABLE_IN_YOUR_CODE        Setze einen &quot;Breakpoint&quot; bei dem dein Programm hält
+&gt;&gt; tui enable                           Aktiviere die UI
+&gt;&gt; layout asm                           Zeige den Assembly-Code deines Programms
+&gt;&gt; layout regs                          Zeige deine Register während des Programmlaufs
+&gt;&gt; run                                  Starte Ausführung des Programms
+&gt;&gt; ni                                   Next Instruction
+&gt;&gt; continue                             Führe code weiter aus bis zum Schluss oder bis nächster breakpoint
+&gt;&gt; quit                                 Beende gdb
 </code></pre>
 
 <h2>Quellen:</h2>

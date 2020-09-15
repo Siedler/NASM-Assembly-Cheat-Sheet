@@ -46,12 +46,12 @@ Beispiel:
 	MOV rax, rdx ; Verschiebe Wert von rdx in rax (ergo rax = rdx)
 	MOV rsi, 2   ; Verschiebe die Zahl 2 in das Register rsi (ergo rsi = 2)
 
-#### SHL reg (value 1), value / SHL reg (value 1), reg (value 2)
+#### SHL reg (value 1), value / SHL reg (value 1), cl
 Definition: Shifte den Wert des Registers um n Stellen nach Links. Bits die nach Links "rausgeschoben" werden gehen verloren
 
 Beispiel:
 
-	SHL rax, rdx ; Verschiebe alle Bits von rax um n-Stellen (Entsprechend des Wertes aus rdx)
+	SHL rax, cl ; Verschiebe alle Bits von rax um n-Stellen (Entsprechend des Wertes aus cl)
 	SHL rax, 1   ; Verschiebe alle Bits 
 
 Beispiel under the hood:
@@ -62,13 +62,17 @@ Beispiel under the hood:
 	
 	=> rax = 1000 0110
 
-#### SHR reg (value 1), value / SHR reg (value 1), reg (value 2)
+ACHTUNG: Sowohl SHR, als auch SHL nutzen können nur das Register cl als Registerverschiebungswert nehmen! Dies ist dadurch begründet, dass bei der Entwicklung eines x86-Chips nur eine Verbindung des Count-Registers (cl) angelegt wurde für Verschiebungen.
+
+#### SHR reg (value 1), value / SHR reg (value 1), cl
 Definition: Shifte den Wert des Registers um n Stellen nach Rechts. Also analog zu SHL
 
 Beispiel:
 	
-	SHR rax, rdx
+	SHR rax, cl
 	SHR rax, 1
+
+ACHTUNG: Sowohl SHR, als auch SHL nutzen können nur das Register cl als Registerverschiebungswert nehmen! Dies ist dadurch begründet, dass bei der Entwicklung eines x86-Chips nur eine Verbindung des Count-Registers (cl) angelegt wurde für Verschiebungen.
 
 #### ROL reg (value 1), value / ROL reg (value 1), reg (value 2)
 Definition: Rotiere die Werte um n Stelle. Dies ist Analog zu SHL jedoch gehen hier die Bits die nach links raus geschoben werden nicht verloren, sondern werden rechts hinzugefügt.
@@ -354,6 +358,19 @@ Abschließend solltet ihr eine Datei "PROGRAMM_NAME" besitzen. Diese könnt ihr 
 Alternativ könnt ihr auch einfach die gegebene MAKEFILE nutzen
 
 	>> make
+
+## Debugging with gdb:
+Um Einblick in die Ausführung des ASM-Codes zu bekommen kann man gdb verwenden. Hierzu findet ihr eine kleine Zusammenfassung von Befehlen zur Ausführung des gdb mit einer UI:
+	
+	>> gdb PROGRAMM_NAME					Lade deinen code in gdb
+	>> break SOME_LABLE_IN_YOUR_CODE		Setze einen "Breakpoint" bei dem dein Programm hält
+	>> tui enable 							Aktiviere die UI
+	>> layout asm							Zeige den Assembly-Code deines Programms
+	>> layout regs							Zeige deine Register während des Programmlaufs
+	>> run									Starte Ausführung des Programms
+	>> ni									Next Instruction
+	>> continue								Führe code weiter aus bis zum Schluss oder bis nächster breakpoint
+	>> quit									Beende gdb
 
 ## Quellen:
 https://en.wikibooks.org/wiki/X86_Assembly/X86_Architecture
