@@ -318,8 +318,8 @@ um diese Bits zu setzen.
 |--------------------- |---------- |
 | `je`                 | "Jump equal"     -- Springe, wenn der Vergleich ergeben hat, dass die Werte die selben sind |
 | `jne`                | "Jump not equal" -- Springe, wenn der Vergleich ergeben hat, dass die Werte ungleich sind |
-| `jb`                 | "Jump above"     -- Springe wenn $\text{reg1} < \text{reg2}$ oder $\text{reg1} < \text{value}$ (unsigned number) |
-| `ja`                 | "Jump below"     -- Springe wenn $\text{reg1} > \text{reg2}$ oder $\text{reg1} > \text{value}$ (unsigned number) |
+| `ja`                 | "Jump above"     -- Springe wenn $\text{reg1} < \text{reg2}$ oder $\text{reg1} < \text{value}$ (unsigned number) |
+| `jb`                 | "Jump below"     -- Springe wenn $\text{reg1} > \text{reg2}$ oder $\text{reg1} > \text{value}$ (unsigned number) |
 | `jl`                 | "Jump less"      -- Springe wenn $\text{reg1} < \text{reg2}$ oder $\text{reg1} < \text{value}$ (signed number) |
 | `jg`                 | "Jump greater"   -- Springe wenn $\text{reg1} > \text{reg2}$ oder $\text{reg1} > \text{value}$ (signed number) |
 | `jle` / `jge` / ...  | "Jump less equal" / "Jump greater equal" -- Analog zu den Sprüngen oben nur mit equal |
