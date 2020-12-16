@@ -414,7 +414,7 @@ Beispiel:
 
 	some_function:
 		...
-		call some-other-function
+		call some_other_function
 		; ret der subroutine macht hier weiter
 		...
 
