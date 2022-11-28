@@ -1,5 +1,5 @@
 ---
-title: 'Linux x86 Assembly Cheat Sheet'
+title: 'Linux x86 Assembly Cheat Sheet (FU Berlin, TI 2 und 3)'
 ---
 
 # Register
@@ -11,6 +11,27 @@ title: 'Linux x86 Assembly Cheat Sheet'
   <tr style="text-align: center;"><th scope="row">32-bit</th><td style="width: 6%;" colspan="4"></td><td style="width: 6%;" colspan="4">eax</td><td style="width: 6%;" colspan="4"></td><td style="width: 6%;" colspan="4">ecx</td><td style="width: 6%;" colspan="4"></td><td style="width: 6%;" colspan="4">edx</td><td style="width: 6%;" colspan="4"></td><td style="width: 6%;" colspan="4">ebx</td><td style="width: 6%;" colspan="4"></td><td style="width: 6%;" colspan="4">esp</td><td style="width: 6%;" colspan="4"></td><td style="width: 6%;" colspan="4">ebp</td><td style="width: 6%;" colspan="4"></td><td style="width: 6%;" colspan="4">esi</td><td style="width: 6%;" colspan="4"></td><td style="width: 6%;" colspan="4">edi</td></tr>
   <tr style="text-align: center;"><th scope="row">16-bit</th><td style="width: 9%;" colspan="6"></td><td style="width: 3%;" colspan="2">ax</td><td style="width: 9%;" colspan="6"></td><td style="width: 3%;" colspan="2">cx</td><td style="width: 9%;" colspan="6"></td><td style="width: 3%;" colspan="2">dx</td><td style="width: 9%;" colspan="6"></td><td style="width: 3%;" colspan="2">bx</td><td style="width: 9%;" colspan="6"></td><td style="width: 3%;" colspan="2">sp</td><td style="width: 9%;" colspan="6"></td><td style="width: 3%;" colspan="2">bp</td><td style="width: 9%;" colspan="6"></td><td style="width: 3%;" colspan="2">si</td><td style="width: 9%;" colspan="6"></td><td style="width: 3%;" colspan="2">di</td></tr>
   <tr style="text-align: center;"><th scope="row">8-bit</th><td style="width: 9%;" colspan="6"></td><td style="width: 1.5%;" colspan="1">ah</td><td style="width: 1.5%;" colspan="1">al</td><td style="width: 9%;" colspan="6"></td><td style="width: 1.5%;" colspan="1">ch</td><td style="width: 1.5%;" colspan="1">cl</td><td style="width: 9%;" colspan="6"></td><td style="width: 1.5%;" colspan="1">dh</td><td style="width: 1.5%;" colspan="1">dl</td><td style="width: 9%;" colspan="6"></td><td style="width: 1.5%;" colspan="1">bh</td><td style="width: 1.5%;" colspan="1">bl</td><td style="width: 9%;" colspan="7"></td><td style="width: 1.5%;" colspan="1">spl</td><td style="width: 9%;" colspan="7"></td><td style="width: 1.5%;" colspan="1">bpl</td><td style="width: 9%;" colspan="7"></td><td style="width: 1.5%;" colspan="1">sil</td><td style="width: 9%;" colspan="7"></td><td style="width: 1.5%;" colspan="1">dil</td></tr>
+</tbody>
+<caption></caption>
+</table>
+
+## Verbotene Register
+
+
+Folgende Register sollten nicht benutzt werden. Das schließt die kleineren Register mit ein.
+
+<table style="background-color: #f8f9fa;color: #202122;margin: 1em 0;border: 1px solid #a2a9b1;border-collapse: collapse;">
+<tbody>
+<tr><th>Register</th><th>Zugehörig</th><th>Grund</th></tr>
+<tr><td>rbp</td><td>ebp, bp, bpl</td><td>Pointer zur vorherigen Stackframe.</td></tr>
+<tr><td>rsp</td><td>esp, sp, sple</td><td>Markiert die Position des obersten Eintrags im Stack.</td></tr>
+<tr><td>rbx</td><td>ebx, bx, bh, bl</td><td>Vorgabe, wird direkt für die Steuerung des Programmablaufs genutzt.</td></tr>
+<tr><td>r12</td><td>r12d, r12w, r12b</td><td>Reserviert für interne Abläufe. Kann genutzt werden, falls der Wert manuell gespeichert wurde.</td></tr>
+<tr><td>r13</td><td>r13d, r13w, r13b</td><td>Reserviert laut Standard.</td></tr>
+<tr><td>r14</td><td>r14d, r14w, r14b</td><td>Reserviert laut Standard.</td></tr>
+<tr><td>r15</td><td>r15d, r15w, r15b</td><td>Reserviert laut Standard.</td></tr>
+<tr><td>rip</td><td>ip</td><td>Program counter.</td></tr>
+<tr><td>rflags</td><td>eflags, flags</td><td>Regelt zero flag, carry flag, etc.</td></tr>
 </tbody>
 <caption></caption>
 </table>
@@ -575,3 +596,5 @@ Hierzu findet ihr eine kleine Zusammenfassung von Befehlen zur Ausführung des
 * https://en.wikibooks.org/wiki/X86_Assembly/X86_Architecture
 * https://en.wikipedia.org/wiki/X86_calling_conventions
 * https://stackoverflow.com/questions/18024672/what-registers-are-preserved-through-a-linux-x86-64-function-call
+* https://www.cs.uaf.edu/2017/fall/cs301/reference/x86_64.html
+* https://cs61.seas.harvard.edu/site/2018/Asm1/
