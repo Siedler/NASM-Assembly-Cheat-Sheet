@@ -343,8 +343,8 @@ um diese Bits zu setzen.
 | `ja`                 | "Jump above"     -- Springe wenn $\text{reg1} > \text{reg2}$ oder $\text{reg1} > \text{value}$ (unsigned number) |
 | `jl`                 | "Jump less"      -- Springe wenn $\text{reg1} < \text{reg2}$ oder $\text{reg1} < \text{value}$ (signed number) |
 | `jg`                 | "Jump greater"   -- Springe wenn $\text{reg1} > \text{reg2}$ oder $\text{reg1} > \text{value}$ (signed number) |
-| `jz`                 | "Jump zero"      -- Springe wenn das Ergebnis 0 ist (äquivalent zu je) |
-| `jnz`                | "Jump not zero"  -- Springe wenn das Ergebnis nicht 0 ist (äquivalent zu jne) |
+| `jz`                 | "Jump zero"      -- Äquivalent zu `je`. Springe wenn das Ergebnis 0 ist. |
+| `jnz`                | "Jump not zero"  -- Äquivalent zu `jne`. Springe wenn das Ergebnis nicht 0 ist. |
 | `jle` / `jge` / ...  | "Jump less equal" / "Jump greater equal" -- Analog zu den Sprüngen oben nur mit equal |
 
 Beispiele:

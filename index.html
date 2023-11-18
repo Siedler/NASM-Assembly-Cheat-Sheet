@@ -1,18 +1,31 @@
-<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
-<html xmlns="http://www.w3.org/1999/xhtml">
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" lang="" xml:lang="">
 <head>
-  <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
-  <meta http-equiv="Content-Style-Type" content="text/css" />
+  <meta charset="utf-8" />
   <meta name="generator" content="pandoc" />
-  <title>Linux x86 Assembly Cheat Sheet</title>
-  <style type="text/css">code{white-space: pre;}</style>
-  <link rel="stylesheet" href="styles/style.css" type="text/css" />
-  <script src="https://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS_CHTML-full" type="text/javascript"></script>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes" />
+  <title>Linux x86 Assembly Cheat Sheet (FU Berlin, TI 2 und 3)</title>
+  <style>
+    code{white-space: pre-wrap;}
+    span.smallcaps{font-variant: small-caps;}
+    span.underline{text-decoration: underline;}
+    div.column{display: inline-block; vertical-align: top; width: 50%;}
+    div.hanging-indent{margin-left: 1.5em; text-indent: -1.5em;}
+    ul.task-list{list-style: none;}
+  </style>
+  <link rel="stylesheet" href="styles/style.css" />
+  <script
+  src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-chtml-full.js"
+  type="text/javascript"></script>
+  <!--[if lt IE 9]>
+    <script src="//cdnjs.cloudflare.com/ajax/libs/html5shiv/3.7.3/html5shiv-printshiv.min.js"></script>
+  <![endif]-->
 </head>
 <body>
-<div id="header">
-<h1 class="title">Linux x86 Assembly Cheat Sheet</h1>
-</div>
+<header id="title-block-header">
+<h1 class="title">Linux x86 Assembly Cheat Sheet (FU Berlin, TI 2 und
+3)</h1>
+</header>
 <h1 id="register">Register</h1>
 <table style="background-color: #f8f9fa;color: #202122;margin: 1em 0;border: 1px solid #a2a9b1;border-collapse: collapse;">
 <tbody>
@@ -225,6 +238,126 @@ dil
 <caption>
 </caption>
 </table>
+<h2 id="verbotene-register">Verbotene Register</h2>
+<p>Folgende Register sollten nicht benutzt werden. Das schließt die
+kleineren Register mit ein.</p>
+<table style="background-color: #f8f9fa;color: #202122;margin: 1em 0;border: 1px solid #a2a9b1;border-collapse: collapse;">
+<tbody>
+<tr>
+<th>
+Register
+</th>
+<th>
+Zugehörig
+</th>
+<th>
+Grund
+</th>
+</tr>
+<tr>
+<td>
+rbp
+</td>
+<td>
+ebp, bp, bpl
+</td>
+<td>
+Pointer zur vorherigen Stackframe.
+</td>
+</tr>
+<tr>
+<td>
+rsp
+</td>
+<td>
+esp, sp, sple
+</td>
+<td>
+Markiert die Position des obersten Eintrags im Stack.
+</td>
+</tr>
+<tr>
+<td>
+rbx
+</td>
+<td>
+ebx, bx, bh, bl
+</td>
+<td>
+Vorgabe, wird direkt für die Steuerung des Programmablaufs genutzt.
+</td>
+</tr>
+<tr>
+<td>
+r12
+</td>
+<td>
+r12d, r12w, r12b
+</td>
+<td>
+Reserviert für interne Abläufe. Kann genutzt werden, falls der Wert
+manuell gespeichert wurde.
+</td>
+</tr>
+<tr>
+<td>
+r13
+</td>
+<td>
+r13d, r13w, r13b
+</td>
+<td>
+Reserviert laut Standard.
+</td>
+</tr>
+<tr>
+<td>
+r14
+</td>
+<td>
+r14d, r14w, r14b
+</td>
+<td>
+Reserviert laut Standard.
+</td>
+</tr>
+<tr>
+<td>
+r15
+</td>
+<td>
+r15d, r15w, r15b
+</td>
+<td>
+Reserviert laut Standard.
+</td>
+</tr>
+<tr>
+<td>
+rip
+</td>
+<td>
+ip
+</td>
+<td>
+Program counter.
+</td>
+</tr>
+<tr>
+<td>
+rflags
+</td>
+<td>
+eflags, flags
+</td>
+<td>
+Regelt zero flag, carry flag, etc.
+</td>
+</tr>
+</tbody>
+<caption>
+</caption>
+</table>
 <h2 id="eingabe-register">Eingabe-Register</h2>
 <p>Funktionsparameter werden in folgenden Registern übermittelt:</p>
 <table>
@@ -284,11 +417,26 @@ Stack
 </tbody>
 </table>
 <h2 id="rückgabe-register">Rückgabe-Register</h2>
-<p>Der Rückgabewert einer Funktion steht im <code>rax</code> Register. Achtet dabei darauf, dass ihr euer Ergebnis immer ins rax Register schreibt.</p>
-<p>Für Floating-Point-Zahlen steht das Ergebnis einer Funktion im <code>xmm0</code> Register.</p>
-<h2 id="volatile--vs.-non-volatile-register">Volatile- vs. Non-Volatile-Register</h2>
-<p>Nach Calling-Convention werden die Register in 2 Kategorien eingeteilt: Volatile und Non-Volatile. Non-Volatile-Register behalten, nach Calling-Convention, nach einem Funktionsaufruf ihren Wert. D.h. wir müssen uns nicht um die Sicherung dieser Register kümmern, wenn wir eine weitere Funktion aufrufen. Dies bedeutet aber auch automatisch, dass wir diese Register auf dem Stack sichern müssen (<code>push</code>), wenn wir sie verwenden wollen, und sie wiederherstellen (<code>pop</code>) bevor unsere Funktion beendet.</p>
-<p>Volatile-Register auf der anderen Seite verhalten sich genau andersherum: Wir dürfen die Wert die dort gespeichert sind verändern, ohne uns um eine Sicherung Gedanken machen zu müssen. Wollen wir jedoch ihren Wert über einen weiteren Funktionsaufruf behalten, müssen wir sie manuell vor dem Aufruf sichern.</p>
+<p>Der Rückgabewert einer Funktion steht im <code>rax</code> Register.
+Achtet dabei darauf, dass ihr euer Ergebnis immer ins rax Register
+schreibt.</p>
+<p>Für Floating-Point-Zahlen steht das Ergebnis einer Funktion im
+<code>xmm0</code> Register.</p>
+<h2 id="volatile--vs.-non-volatile-register">Volatile-
+vs. Non-Volatile-Register</h2>
+<p>Nach Calling-Convention werden die Register in 2 Kategorien
+eingeteilt: Volatile und Non-Volatile. Non-Volatile-Register behalten,
+nach Calling-Convention, nach einem Funktionsaufruf ihren Wert. D.h. wir
+müssen uns nicht um die Sicherung dieser Register kümmern, wenn wir eine
+weitere Funktion aufrufen. Dies bedeutet aber auch automatisch, dass wir
+diese Register auf dem Stack sichern müssen (<code>push</code>), wenn
+wir sie verwenden wollen, und sie wiederherstellen (<code>pop</code>)
+bevor unsere Funktion beendet.</p>
+<p>Volatile-Register auf der anderen Seite verhalten sich genau
+andersherum: Wir dürfen die Wert die dort gespeichert sind verändern,
+ohne uns um eine Sicherung Gedanken machen zu müssen. Wollen wir jedoch
+ihren Wert über einen weiteren Funktionsaufruf behalten, müssen wir sie
+manuell vor dem Aufruf sichern.</p>
 <table>
 <thead>
 <tr class="header">
@@ -352,13 +500,18 @@ Stack
 </table>
 <h1 id="befehle">Befehle</h1>
 <h2 id="bewegen-von-daten">Bewegen von Daten:</h2>
-<h3 id="mov-reg-to-value-mov-reg-to-reg-from">mov reg (to), value / mov reg (to), reg (from):</h3>
-<p>Definition: Verschiebe ein Wert bzw. den Wert eines Registers in ein weiteres Register.</p>
+<h3 id="mov-reg-to-value-mov-reg-to-reg-from">mov reg (to), value / mov
+reg (to), reg (from):</h3>
+<p>Definition: Verschiebe ein Wert bzw. den Wert eines Registers in ein
+weiteres Register.</p>
 <p>Beispiel:</p>
 <pre><code>mov rax, rdx ; Verschiebe Wert von rdx in rax (ergo rax = rdx)
 mov rsi, 2   ; Verschiebe die Zahl 2 in das Register rsi (ergo rsi = 2)</code></pre>
-<h3 id="shl-reg-value-1-value-shl-reg-value-1-cl">shl reg (value 1), value / shl reg (value 1), cl</h3>
-<p>Definition: Shifte den Wert des Registers um <span class="math inline">\(n\)</span> Stellen nach Links. Bits die nach Links &quot;rausgeschoben&quot; werden gehen verloren</p>
+<h3 id="shl-reg-value-1-value-shl-reg-value-1-cl">shl reg (value 1),
+value / shl reg (value 1), cl</h3>
+<p>Definition: Shifte den Wert des Registers um <span
+class="math inline">\(n\)</span> Stellen nach Links. Bits die nach Links
+“rausgeschoben” werden gehen verloren</p>
 <p>Beispiel:</p>
 <pre><code>shl rax, cl ; Verschiebe alle Bits von rax um n-Stellen (Entsprechend des Wertes aus cl)
 shl rax, 1   ; Verschiebe alle Bits</code></pre>
@@ -368,15 +521,28 @@ shl rax, 1   ; Verschiebe alle Bits</code></pre>
 shl rax, 1
 
 =&gt; rax = 1000 0110</code></pre>
-<p>ACHTUNG: Sowohl shr, als auch shl nutzen können nur das Register <code>cl</code> als Registerverschiebungswert nehmen! Dies ist dadurch begründet, dass bei der Entwicklung eines x86-Chips nur eine Verbindung des Count-Registers (<code>cl</code>) angelegt wurde für Verschiebungen.</p>
-<h3 id="shr-reg-value-1-value-shr-reg-value-1-cl">shr reg (value 1), value / shr reg (value 1), cl</h3>
-<p>Definition: Shifte den Wert des Registers um n Stellen nach Rechts. Also analog zu <code>shl</code>.</p>
+<p>ACHTUNG: Sowohl shr, als auch shl nutzen können nur das Register
+<code>cl</code> als Registerverschiebungswert nehmen! Dies ist dadurch
+begründet, dass bei der Entwicklung eines x86-Chips nur eine Verbindung
+des Count-Registers (<code>cl</code>) angelegt wurde für
+Verschiebungen.</p>
+<h3 id="shr-reg-value-1-value-shr-reg-value-1-cl">shr reg (value 1),
+value / shr reg (value 1), cl</h3>
+<p>Definition: Shifte den Wert des Registers um n Stellen nach Rechts.
+Also analog zu <code>shl</code>.</p>
 <p>Beispiel:</p>
 <pre><code>shr rax, cl
 shr rax, 1</code></pre>
-<p>ACHTUNG: Sowohl <code>shr</code>, als auch <code>shl</code> können nur das Register <code>cl</code> als Registerverschiebungswert nutzen! Bei der Entwicklung der x86-Chips wurde nur eine Verbindung des Count-Registers (<code>cl</code>) für Verschiebungen angelegt.</p>
-<h3 id="rol-reg-value-1-value-rol-reg-value-1-reg-value-2">rol reg (value 1), value / rol reg (value 1), reg (value 2)</h3>
-<p>Definition: Rotiere die Werte um <span class="math inline">\(n\)</span> Stellen. Dies ist Analog zu shl jedoch gehen hier die Bits die nach links raus geschoben werden nicht verloren, sondern werden rechts hinzugefügt.</p>
+<p>ACHTUNG: Sowohl <code>shr</code>, als auch <code>shl</code> können
+nur das Register <code>cl</code> als Registerverschiebungswert nutzen!
+Bei der Entwicklung der x86-Chips wurde nur eine Verbindung des
+Count-Registers (<code>cl</code>) für Verschiebungen angelegt.</p>
+<h3 id="rol-reg-value-1-value-rol-reg-value-1-reg-value-2">rol reg
+(value 1), value / rol reg (value 1), reg (value 2)</h3>
+<p>Definition: Rotiere die Werte um <span
+class="math inline">\(n\)</span> Stellen. Dies ist Analog zu shl jedoch
+gehen hier die Bits die nach links raus geschoben werden nicht verloren,
+sondern werden rechts hinzugefügt.</p>
 <p>Beispiel:</p>
 <pre><code>rol rax, rdx
 rol rax, 1</code></pre>
@@ -385,14 +551,21 @@ rol rax, 1</code></pre>
 
 rol rax, 1
 =&gt; rax = 1000 1001</code></pre>
-<h3 id="ror-reg-value-1-value-ror-reg-value-1-reg-value-2">ror reg (value 1), value / ror reg (value 1), reg (value 2)</h3>
-<p>Definition: Rotiere die Werte um <span class="math inline">\(n\)</span> Stellen nach Rechts. Also analog zu <code>rol</code></p>
+<h3 id="ror-reg-value-1-value-ror-reg-value-1-reg-value-2">ror reg
+(value 1), value / ror reg (value 1), reg (value 2)</h3>
+<p>Definition: Rotiere die Werte um <span
+class="math inline">\(n\)</span> Stellen nach Rechts. Also analog zu
+<code>rol</code></p>
 <p>Beispiel:</p>
 <pre><code>ror rax, rdx
 ror rax, 1</code></pre>
 <h2 id="bit-operationen">Bit-Operationen:</h2>
-<h3 id="and-reg-value-1-value-and-reg-value-1-reg-value-2">and reg (value 1), value / and reg (value 1), reg (value 2)</h3>
-<p>Definition: Wendet das logische UND (<span class="math inline">\(\land\)</span>) mit dem Wert des zweiten Parameters auf den Wert des ersten Registers an und speichert das Ergebnis im ersten Register.</p>
+<h3 id="and-reg-value-1-value-and-reg-value-1-reg-value-2">and reg
+(value 1), value / and reg (value 1), reg (value 2)</h3>
+<p>Definition: Wendet das logische UND (<span
+class="math inline">\(\land\)</span>) mit dem Wert des zweiten
+Parameters auf den Wert des ersten Registers an und speichert das
+Ergebnis im ersten Register.</p>
 <p>Beispiel:</p>
 <pre><code>and rax, rsi ; Verunde den Wert aus rax mit dem Wert aus rsi
 and rax, 0x1 ; Verunde den Wert aus rax mit dem Wert 0x1 (Hexadezimal-Zahl)</code></pre>
@@ -406,8 +579,12 @@ and rax, rsi = 0101 1101 and 1101 1011
 1001 1011
 ---------
 0001 1001 = rax</code></pre>
-<h3 id="or-reg-value-1-value-or-reg-value-1-reg-value-2">or reg (value 1), value / or reg (value 1), reg (value 2)</h3>
-<p>Definition: Wende das logische ODER (<span class="math inline">\(\lor\)</span>) mit dem Wert des zweiten Parameters auf das erste Register an und speichert das Ergebnis im ersten Register.</p>
+<h3 id="or-reg-value-1-value-or-reg-value-1-reg-value-2">or reg (value
+1), value / or reg (value 1), reg (value 2)</h3>
+<p>Definition: Wende das logische ODER (<span
+class="math inline">\(\lor\)</span>) mit dem Wert des zweiten Parameters
+auf das erste Register an und speichert das Ergebnis im ersten
+Register.</p>
 <p>Beispiel:</p>
 <pre><code>or rax, rsi ; Veroder den Wert aus rax mit dem Wert aus rsi
 or rdx, 0xf ; Veroder den Wert aus rdx mit dem Wert 0xf (Binär = 1111)</code></pre>
@@ -421,8 +598,11 @@ or rdx, 0xf = 0011 1101 or 0000 1101
 0000 1101
 ---------
 0011 1101 = rdx</code></pre>
-<h3 id="xor-reg-value-1-value-xor-reg-value-1-reg-value-2">xor reg (value 1), value / xor reg (value 1), reg (value 2):</h3>
-<p>Definition: Wendet das logische XOR (<span class="math inline">\(\oplus\)</span>) mit dem Wert des zweiten Parameters auf den Wert des ersten Registers an.</p>
+<h3 id="xor-reg-value-1-value-xor-reg-value-1-reg-value-2">xor reg
+(value 1), value / xor reg (value 1), reg (value 2):</h3>
+<p>Definition: Wendet das logische XOR (<span
+class="math inline">\(\oplus\)</span>) mit dem Wert des zweiten
+Parameters auf den Wert des ersten Registers an.</p>
 <p>Beispiel:</p>
 <pre><code>xor rax, rsi  ; Wendet XOR auf den Wert von rax mit dem Wert von rsi an
 xor rdx, 0x8f ; Wendet XOR auf den Wert von rdx mit 0x8f (Binär = 1000 1111) an</code></pre>
@@ -438,41 +618,64 @@ xor rdx, 0x8f
 0000 1011 = rdx</code></pre>
 <h2 id="arithmetische-operationen">Arithmetische-Operationen:</h2>
 <h3 id="neg-reg-value-1">neg reg (value 1):</h3>
-<p>Definition: Negiere den Wert aus dem gegebenen Register (in 2er Komplement).</p>
+<p>Definition: Negiere den Wert aus dem gegebenen Register (in 2er
+Komplement).</p>
 <p>Beispiel:</p>
 <pre><code>neg rsi ; Negiere den Wert in rsi</code></pre>
-<h3 id="add-reg-value-1-value-add-reg-value-1-reg-value-2">add reg (value 1), value / add reg (value 1), reg (value 2):</h3>
-<p>Definition: Addiere einen Wert bzw. den Wert eines Registers auf den Wert eines anderen Registers.</p>
+<h3 id="add-reg-value-1-value-add-reg-value-1-reg-value-2">add reg
+(value 1), value / add reg (value 1), reg (value 2):</h3>
+<p>Definition: Addiere einen Wert bzw. den Wert eines Registers auf den
+Wert eines anderen Registers.</p>
 <p>Beispiel:</p>
 <pre><code>add rax, rdx ; Addiere Wert von rdx auf rax und Speicher Ergebnis in rax (rax = rax + rdx)
 add rsi, 2   ; Addiere die Zahl 2 auf rsi und Speicher Ergebnis in rsi (rsi = rsi + 2)</code></pre>
-<h3 id="sub-reg-value-1-value-sub-reg-value-1-reg-value-2">sub reg (value 1), value / sub reg (value 1), reg (value 2):</h3>
+<h3 id="sub-reg-value-1-value-sub-reg-value-1-reg-value-2">sub reg
+(value 1), value / sub reg (value 1), reg (value 2):</h3>
 <p>Definition: Analog zu <code>add</code> jedoch als Subtraktion</p>
 <p>Beispiele:</p>
 <pre><code>sub rax, rdx ; Subtrahiere von rax den Wert von rdx und speichere das Ergebnis in rax (rax = rax - rdx)
 sub rsi, 2   ; Subtrahiere von rsi den Wert 2 (rsi = rsi - 2)</code></pre>
 <h3 id="mul-reg-value-1">mul reg (value 1):</h3>
-<p>Definition: Multipliziere den Wert in Register rax mit dem Wert des angegebenen Registers. Das Ergebnis wird in die <em>beiden (!!!)</em> Register rax und rdx gespeichert (rdx, falls ein Überlauf der Zahl in rax passiert)</p>
+<p>Definition: Multipliziere den Wert in Register rax mit dem Wert des
+angegebenen Registers. Das Ergebnis wird in die <em>beiden (!!!)</em>
+Register rax und rdx gespeichert (rdx, falls ein Überlauf der Zahl in
+rax passiert)</p>
 <p>Beispiel:</p>
 <pre><code>mul rsi ; Multipliziere den Wert in rax mit dem Wert aus rsi und speichere das Ergebnis in (rdx) rax</code></pre>
-<p>ACHTUNG: Dieser Befehl kann nicht mit einem Wert genutzt werden. Falls man das Register rax mit einem bestimmten Wert multiplizieren möchte muss man diesen vorher in ein Register verschieben:</p>
+<p>ACHTUNG: Dieser Befehl kann nicht mit einem Wert genutzt werden.
+Falls man das Register rax mit einem bestimmten Wert multiplizieren
+möchte muss man diesen vorher in ein Register verschieben:</p>
 <pre><code>mov rsi, 3
 mul rsi    ; Multipliziere rax mit 3</code></pre>
 <h3 id="div-reg-value-1">div reg (value 1):</h3>
-<p>Definition: Dividiere den Wert aus rdx:rax (rdx konkateniert mit rax) durch den Wert aus dem angegebenen Register. Ergebnis wird in rax (ganzzahlige Division) und rdx (Rest) gespeichert</p>
+<p>Definition: Dividiere den Wert aus rdx:rax (rdx konkateniert mit rax)
+durch den Wert aus dem angegebenen Register. Ergebnis wird in rax
+(ganzzahlige Division) und rdx (Rest) gespeichert</p>
 <p>Beispiel:</p>
 <pre><code>div rsi ; Dividiert rdx:rax durch den Wert in rsi. Rest wird in rdx gespeichert und Wert der ganzzahligen Division in rax</code></pre>
-<p>ACHTUNG: Prüfe vor der Division, ob der Wert, der sich in rdx befindet, korrekt ist. Dort könnte sich 1. ein Wert befinden, der nichts mit der gewollten Rechnung zu tun hat und 2. ein Wert drin befinden der nach der Division erhalten bleiben sollte.</p>
-<h3 id="imul-reg-value-1-und-idiv-reg-value-1">imul reg (value 1) und idiv reg (value 1):</h3>
-<p>Definition: Analog zu mul/div, aber mit signed Zahlen (d.h. Zahlen mit Vorzeichen)</p>
-<h2 id="vergleichesprünge-und-bedinge-sprünge">Vergleiche/Sprünge und Bedinge Sprünge:</h2>
-<h3 id="cmp-reg-value-1-value-cmp-reg-value-1-reg-value-2">cmp reg (value 1), value / cmp reg (value 1), reg (value 2):</h3>
-<p>Definition: Vergleiche ein Register mit einem Wert bzw. mit dem Wert eines weiteren Registers. Diese Operation setzt Bits im Flag-Register die später für Bedingte-Sprünge verwendet werden könnten</p>
+<p>ACHTUNG: Prüfe vor der Division, ob der Wert, der sich in rdx
+befindet, korrekt ist. Dort könnte sich 1. ein Wert befinden, der nichts
+mit der gewollten Rechnung zu tun hat und 2. ein Wert drin befinden der
+nach der Division erhalten bleiben sollte.</p>
+<h3 id="imul-reg-value-1-und-idiv-reg-value-1">imul reg (value 1) und
+idiv reg (value 1):</h3>
+<p>Definition: Analog zu mul/div, aber mit signed Zahlen (d.h. Zahlen
+mit Vorzeichen)</p>
+<h2 id="vergleichesprünge-und-bedinge-sprünge">Vergleiche/Sprünge und
+Bedinge Sprünge:</h2>
+<h3 id="cmp-reg-value-1-value-cmp-reg-value-1-reg-value-2">cmp reg
+(value 1), value / cmp reg (value 1), reg (value 2):</h3>
+<p>Definition: Vergleiche ein Register mit einem Wert bzw. mit dem Wert
+eines weiteren Registers. Diese Operation setzt Bits im Flag-Register
+die später für Bedingte-Sprünge verwendet werden könnten</p>
 <p>Beispiel:</p>
 <pre><code>cmp rax, rsi ; Vergleiche rax mit dem Wert aus rsi
 cmp rax, 2   ; Vergleiche rax mit dem Wert 2</code></pre>
 <h3 id="jmp-some_label">jmp some_label:</h3>
-<p>Definition: Setze den Programm Counter (PC, bzw. <code>rip</code>) auf die Adresse des angegebenen Labels (<code>some_label</code>). An Stelle eines Labels kann auch direkt eine Zahl als Adresse genutzt werden (<code>jmp 100</code>).</p>
+<p>Definition: Setze den Programm Counter (PC, bzw. <code>rip</code>)
+auf die Adresse des angegebenen Labels (<code>some_label</code>). An
+Stelle eines Labels kann auch direkt eine Zahl als Adresse genutzt
+werden (<code>jmp 100</code>).</p>
 <p>Beispiel:</p>
 <pre><code>; [...]
 jmp .some_label
@@ -480,12 +683,17 @@ jmp .some_label
 
 .some_label:
 ; [Do something]</code></pre>
-<h3 id="jl-some_label-jb-some_label-jg-some_label-ja-some_label-je-some_label-jne-some_label-...">jl some_label / jb some_label / jg some_label / ja some_label / je some_label / jne some_label ...</h3>
-<p>Definition: Springe, wenn bestimmte Bits im Flag-Register gesetzt sind. Dies wird in der Regel in Kombination mit einer Vergleich-Operation genutzt, um diese Bits zu setzen.</p>
-<table style="width:46%;">
+<h3
+id="jl-some_label-jb-some_label-jg-some_label-ja-some_label-je-some_label-jne-some_label">jl
+some_label / jb some_label / jg some_label / ja some_label / je
+some_label / jne some_label …</h3>
+<p>Definition: Springe, wenn bestimmte Bits im Flag-Register gesetzt
+sind. Dies wird in der Regel in Kombination mit einer
+Vergleich-Operation genutzt, um diese Bits zu setzen.</p>
+<table>
 <colgroup>
-<col width="30%" />
-<col width="15%" />
+<col style="width: 67%" />
+<col style="width: 32%" />
 </colgroup>
 <thead>
 <tr class="header">
@@ -496,31 +704,53 @@ jmp .some_label
 <tbody>
 <tr class="odd">
 <td><code>je</code></td>
-<td>&quot;Jump equal&quot; -- Springe, wenn der Vergleich ergeben hat, dass die Werte die selben sind</td>
+<td>“Jump equal” – Springe, wenn der Vergleich ergeben hat, dass die
+Werte die selben sind</td>
 </tr>
 <tr class="even">
 <td><code>jne</code></td>
-<td>&quot;Jump not equal&quot; -- Springe, wenn der Vergleich ergeben hat, dass die Werte ungleich sind</td>
+<td>“Jump not equal” – Springe, wenn der Vergleich ergeben hat, dass die
+Werte ungleich sind</td>
 </tr>
 <tr class="odd">
 <td><code>jb</code></td>
-<td>&quot;Jump below&quot; -- Springe wenn <span class="math inline">\(\text{reg1} &lt; \text{reg2}\)</span> oder <span class="math inline">\(\text{reg1} &lt; \text{value}\)</span> (unsigned number)</td>
+<td>“Jump below” – Springe wenn <span class="math inline">\(\text{reg1}
+&lt; \text{reg2}\)</span> oder <span class="math inline">\(\text{reg1}
+&lt; \text{value}\)</span> (unsigned number)</td>
 </tr>
 <tr class="even">
 <td><code>ja</code></td>
-<td>&quot;Jump above&quot; -- Springe wenn <span class="math inline">\(\text{reg1} &gt; \text{reg2}\)</span> oder <span class="math inline">\(\text{reg1} &gt; \text{value}\)</span> (unsigned number)</td>
+<td>“Jump above” – Springe wenn <span class="math inline">\(\text{reg1}
+&gt; \text{reg2}\)</span> oder <span class="math inline">\(\text{reg1}
+&gt; \text{value}\)</span> (unsigned number)</td>
 </tr>
 <tr class="odd">
 <td><code>jl</code></td>
-<td>&quot;Jump less&quot; -- Springe wenn <span class="math inline">\(\text{reg1} &lt; \text{reg2}\)</span> oder <span class="math inline">\(\text{reg1} &lt; \text{value}\)</span> (signed number)</td>
+<td>“Jump less” – Springe wenn <span class="math inline">\(\text{reg1}
+&lt; \text{reg2}\)</span> oder <span class="math inline">\(\text{reg1}
+&lt; \text{value}\)</span> (signed number)</td>
 </tr>
 <tr class="even">
 <td><code>jg</code></td>
-<td>&quot;Jump greater&quot; -- Springe wenn <span class="math inline">\(\text{reg1} &gt; \text{reg2}\)</span> oder <span class="math inline">\(\text{reg1} &gt; \text{value}\)</span> (signed number)</td>
+<td>“Jump greater” – Springe wenn <span
+class="math inline">\(\text{reg1} &gt; \text{reg2}\)</span> oder <span
+class="math inline">\(\text{reg1} &gt; \text{value}\)</span> (signed
+number)</td>
 </tr>
 <tr class="odd">
-<td><code>jle</code> / <code>jge</code> / ...</td>
-<td>&quot;Jump less equal&quot; / &quot;Jump greater equal&quot; -- Analog zu den Sprüngen oben nur mit equal</td>
+<td><code>jz</code></td>
+<td>“Jump zero” – Äquivalent zu <code>je</code>. Springe wenn das
+Ergebnis 0 ist.</td>
+</tr>
+<tr class="even">
+<td><code>jnz</code></td>
+<td>“Jump not zero” – Äquivalent zu <code>jne</code>. Springe wenn das
+Ergebnis nicht 0 ist.</td>
+</tr>
+<tr class="odd">
+<td><code>jle</code> / <code>jge</code> / …</td>
+<td>“Jump less equal” / “Jump greater equal” – Analog zu den Sprüngen
+oben nur mit equal</td>
 </tr>
 </tbody>
 </table>
@@ -533,38 +763,70 @@ jl .some_label
 
 .some_label:
 ; execute here if rax &lt; 2</code></pre>
-<h3 id="test-reg-value-1-value-test-reg-value-1-reg-value-2">test reg (value 1), value / test reg (value 1), reg (value 2):</h3>
-<p>Definition: Führt ein logisches UND (<span class="math inline">\(\land\)</span>) auf das erste Register mit dem Wert des zweiten Registers bzw. dem angegebenen Wert aus. Das Ergebnis wird verworfen, jedoch werden folgende Flags gesetzt:</p>
+<h3 id="test-reg-value-1-value-test-reg-value-1-reg-value-2">test reg
+(value 1), value / test reg (value 1), reg (value 2):</h3>
+<p>Definition: Führt ein logisches UND (<span
+class="math inline">\(\land\)</span>) auf das erste Register mit dem
+Wert des zweiten Registers bzw. dem angegebenen Wert aus. Das Ergebnis
+wird verworfen, jedoch werden folgende Flags gesetzt:</p>
 <ul>
-<li><code>sf</code>: signed flag, gibt an ob es sich um eine negative Zahl handelt,</li>
-<li><code>zf</code>: zero flag, gibt an ob das Ergebnis die Zahl 0 repräsentiert,</li>
-<li><code>pf</code>: parity flag, gibt an ob das Ergebnis gerade/ungerade ist, also gdw., ob das letzte Bit gesetzt ist.</li>
+<li><code>sf</code>: signed flag, gibt an ob es sich um eine negative
+Zahl handelt,</li>
+<li><code>zf</code>: zero flag, gibt an ob das Ergebnis die Zahl 0
+repräsentiert,</li>
+<li><code>pf</code>: parity flag, gibt an ob das Ergebnis
+gerade/ungerade ist, also gdw., ob das letzte Bit gesetzt ist.</li>
 </ul>
 <p>Anmerkungen:</p>
 <ul>
-<li><code>je</code>/<code>jz</code> testet, ob das <code>zf</code>-Bit gesetzt ist. Also wenn hier die Verundung das Ergebnis 0 ergab.</li>
+<li><code>je</code>/<code>jz</code> testet, ob das <code>zf</code>-Bit
+gesetzt ist. Also wenn hier die Verundung das Ergebnis 0 ergab.</li>
 </ul>
 <h2 id="sichern-von-daten">Sichern von Daten:</h2>
 <h3 id="grundlagen-stack">Grundlagen Stack:</h3>
-<p>Ein Stack ist eine Datenstruktur die einer Last-In-First-Out-Warteschlange entspringt. D.h. das letzte Element welches hinzugefügt wurde wird das erste Element sein, welches entnommen wird. Die CPU nutzt einen solchen Stack für diverse Operationen, und es gibt Assembly Instruktionen um auf diesen direkt zuzugreifen. Zusätzlich werden zwei Werte vorgehalten: der (Stack-)Base-Pointer (oder Frame-Pointer) und der Stack-Pointer. Der Base-Pointer zeigt immer auf den Beginn des Stacks währenddessen der Stack-Pointer auf die nächste freie Adresse zeigt.</p>
-<p>WICHTIG: nach dem Funktionsaufruf (also vor dem ret Befehl) muss der Stack-Pointer wieder auf der selben Stelle sein wie zu Beginn des Funktionsaufrufs!</p>
+<p>Ein Stack ist eine Datenstruktur die einer
+Last-In-First-Out-Warteschlange entspringt. D.h. das letzte Element
+welches hinzugefügt wurde wird das erste Element sein, welches entnommen
+wird. Die CPU nutzt einen solchen Stack für diverse Operationen, und es
+gibt Assembly Instruktionen um auf diesen direkt zuzugreifen. Zusätzlich
+werden zwei Werte vorgehalten: der (Stack-)Base-Pointer (oder
+Frame-Pointer) und der Stack-Pointer. Der Base-Pointer zeigt immer auf
+den Beginn des Stacks währenddessen der Stack-Pointer auf die nächste
+freie Adresse zeigt.</p>
+<p>WICHTIG: nach dem Funktionsaufruf (also vor dem ret Befehl) muss der
+Stack-Pointer wieder auf der selben Stelle sein wie zu Beginn des
+Funktionsaufrufs!</p>
 <h3 id="push-reg">push reg:</h3>
-<p>Definition: Um Daten auf den Stack zu legen nutzt man den <code>push</code>-Befehl. Dieser legt dann den Wert des angegebenen Registers auf den Stack ab und aktualisiert den Stack-Pointer.</p>
+<p>Definition: Um Daten auf den Stack zu legen nutzt man den
+<code>push</code>-Befehl. Dieser legt dann den Wert des angegebenen
+Registers auf den Stack ab und aktualisiert den Stack-Pointer.</p>
 <p>Beispiel:</p>
 <pre><code>push rax
 push esi
 push cl</code></pre>
 <h3 id="pop-reg">pop reg:</h3>
-<p>Definition: Um Daten vom Stack wieder zu nehmen nutzt man den <code>pop</code>-Befehl. Dieser lädt das Datum welches zuletzt auf den Stack gelegt wurde und speichert es in das jeweilige Register.</p>
+<p>Definition: Um Daten vom Stack wieder zu nehmen nutzt man den
+<code>pop</code>-Befehl. Dieser lädt das Datum welches zuletzt auf den
+Stack gelegt wurde und speichert es in das jeweilige Register.</p>
 <p>Beispiel:</p>
 <pre><code>pop cl
 pop esi
 pop rax</code></pre>
-<p>WICHTIG: Es muss in umgekehrter Reigenfolge gepoppt werden wie die Elemente gepusht wurde. Dies ist der Fall wegen der LIFO-Struktur des Stacks!</p>
-<h2 id="aufrufen-einer-weiteren-funktion">Aufrufen einer weiteren Funktion:</h2>
+<p>WICHTIG: Es muss in umgekehrter Reigenfolge gepoppt werden wie die
+Elemente gepusht wurde. Dies ist der Fall wegen der LIFO-Struktur des
+Stacks!</p>
+<h2 id="aufrufen-einer-weiteren-funktion">Aufrufen einer weiteren
+Funktion:</h2>
 <h3 id="call-some_label">call some_label:</h3>
-<p>Definition: Die <code>call</code>-Instruktion wird genutzt um eine Subroutine aufzurufen. Anders als beim <code>jmp</code>-Befehl wird nach der jeweiligen Subroutine wieder an die Stelle des <code>call</code> zurückgesprungen. D.h. das beim Aufruf eines <code>call</code>-Befehls der PC (<code>rip</code>) auf den Stack gepusht werden bevor der Sprung zur jeweiligen Adresse durchgeführt wird.</p>
-<p>WICHTIG: Achtet beim Aufruf der <code>call</code>-Instruktion darauf, dass ihr die Calling-Convention beachtet (bspw. Eingaberegister füllen oder jeweilige Register sichern)</p>
+<p>Definition: Die <code>call</code>-Instruktion wird genutzt um eine
+Subroutine aufzurufen. Anders als beim <code>jmp</code>-Befehl wird nach
+der jeweiligen Subroutine wieder an die Stelle des <code>call</code>
+zurückgesprungen. D.h. das beim Aufruf eines <code>call</code>-Befehls
+der PC (<code>rip</code>) auf den Stack gepusht werden bevor der Sprung
+zur jeweiligen Adresse durchgeführt wird.</p>
+<p>WICHTIG: Achtet beim Aufruf der <code>call</code>-Instruktion darauf,
+dass ihr die Calling-Convention beachtet (bspw. Eingaberegister füllen
+oder jeweilige Register sichern)</p>
 <p>Beispiel:</p>
 <pre><code>some_function:
     ...
@@ -576,10 +838,17 @@ some_other_function:
     ...
     ret</code></pre>
 <h1 id="assembly-tricks">Assembly-Tricks:</h1>
-<h3 id="ein-register-auf-0-setzen-clean-oder-bereinigen">Ein Register auf 0 setzen (&quot;clean&quot; oder &quot;bereinigen&quot;)</h3>
-<p>Um den Wert eines Registers auf 0 zu setzen könnt ihr einfach die Zahl 0 in das jeweilige Register setzen:</p>
+<h3 id="ein-register-auf-0-setzen-clean-oder-bereinigen">Ein Register
+auf 0 setzen (“clean” oder “bereinigen”)</h3>
+<p>Um den Wert eines Registers auf 0 zu setzen könnt ihr einfach die
+Zahl 0 in das jeweilige Register setzen:</p>
 <pre><code>mov rax, 0 ; Setze rax = 0</code></pre>
-<p>Optional hierzu könnt ihr die <code>xor</code>-Instruktion nutzen. Da XOR ein gegebenen Bit auf 0 setzt, gdw. beide Register-Einträge 0 sind, ODER beide Registereinträge 1 sind folgt daraus, dass ein XOR mit dem selben Wert das jeweilige Register auf 0 setzen wird. Dies hat also den selben Effekt wie ein <code>mov</code> Befehl und <em>kann</em> unter Umständen effizienter sein (konkret ist die Codierungslänge kürzer).</p>
+<p>Optional hierzu könnt ihr die <code>xor</code>-Instruktion nutzen. Da
+XOR ein gegebenen Bit auf 0 setzt, gdw. beide Register-Einträge 0 sind,
+ODER beide Registereinträge 1 sind folgt daraus, dass ein XOR mit dem
+selben Wert das jeweilige Register auf 0 setzen wird. Dies hat also den
+selben Effekt wie ein <code>mov</code> Befehl und <em>kann</em> unter
+Umständen effizienter sein (konkret ist die Codierungslänge kürzer).</p>
 <pre><code>xor rax, rax ; Setze rax = 0
 
 e.g rax = 1101 1111
@@ -590,33 +859,48 @@ xor rax, rax
 1101 1111
 ---------
 0000 0000</code></pre>
-<h3 id="ganzzahlige-multiplikationdivision-um-eine-zweier-potenz">Ganzzahlige Multiplikation/Division um eine zweier Potenz</h3>
-<p>Die Multiplikation bzw. die Division einer Zahl der Basis <span class="math inline">\(b\)</span> mit einer Zahl der Form <span class="math inline">\(b^n\)</span> kann als einfache &quot;Verschiebung&quot; um <span class="math inline">\(n\)</span> Stellen betrachtet werden. Gucken wir uns dies zuerst im Dezimalsystem mit 10-er Potenzen an:</p>
-<span class="math display">\[\begin{align*}
+<h3
+id="ganzzahlige-multiplikationdivision-um-eine-zweier-potenz">Ganzzahlige
+Multiplikation/Division um eine zweier Potenz</h3>
+<p>Die Multiplikation bzw. die Division einer Zahl der Basis <span
+class="math inline">\(b\)</span> mit einer Zahl der Form <span
+class="math inline">\(b^n\)</span> kann als einfache “Verschiebung” um
+<span class="math inline">\(n\)</span> Stellen betrachtet werden. Gucken
+wir uns dies zuerst im Dezimalsystem mit 10-er Potenzen an:</p>
+<p><span class="math display">\[\begin{align*}
     12 \cdot 10^1 &amp;= 12 \cdot 10   &amp;&amp;= 120 \\
     12 \cdot 10^2 &amp;= 12 \cdot 100  &amp;&amp;= 1200 \\
     12 \cdot 10^3 &amp;= 12 \cdot 1000 &amp;&amp;= 12000
-\end{align*}\]</span>
-<span class="math display">\[\begin{align*}
+\end{align*}\]</span></p>
+<p><span class="math display">\[\begin{align*}
     12 \div 10^1 &amp;= 12 \div 10   &amp;&amp;= 1.2 \\
     12 \div 10^2 &amp;= 12 \div 100  &amp;&amp;= 0.12 \\
     12 \div 10^3 &amp;= 12 \div 1000 &amp;&amp;= 0.012
-\end{align*}\]</span>
+\end{align*}\]</span></p>
 <p>Im Binärsystem gilt dieses Prinzip natürlich auch:</p>
-<span class="math display">\[\begin{align*}
-    0011_2 \cdot 2_{10}^1 &amp;= 0011_2 \cdot 2_{10} &amp;&amp;= 0110_2 \\
+<p><span class="math display">\[\begin{align*}
+    0011_2 \cdot 2_{10}^1 &amp;= 0011_2 \cdot 2_{10} &amp;&amp;= 0110_2
+\\
     0011_2 \cdot 2_{10}^2 &amp;= 0011_2 \cdot 4_{10} &amp;&amp;= 1100_2
-\end{align*}\]</span>
-<span class="math display">\[\begin{align*}
-    0011_2 \div 2_{10}^1 &amp;= 0011_2 \div 2_{10} &amp;&amp;= 0001(.1000)_2 \\
-    0011_2 \div 2_{10}^2 &amp;= 0011_2 \div 4_{10} &amp;&amp;= 0000(.1100)_2
-\end{align*}\]</span>
+\end{align*}\]</span></p>
+<p><span class="math display">\[\begin{align*}
+    0011_2 \div 2_{10}^1 &amp;= 0011_2 \div 2_{10} &amp;&amp;=
+0001(.1000)_2 \\
+    0011_2 \div 2_{10}^2 &amp;= 0011_2 \div 4_{10} &amp;&amp;=
+0000(.1100)_2
+\end{align*}\]</span></p>
 <p>Hinweise:</p>
-<ol style="list-style-type: decimal">
-<li>Wir geben mit den Subscripts die Basis der Zahlendarstellung an.</li>
-<li>Da wir mit Binärdarstellungen fester Größe arbeiten können die Zahlen hinter dem Komma nicht dargestellt werden. Daher sind nur ganzzahlige Division möglich.</li>
+<ol type="1">
+<li>Wir geben mit den Subscripts die Basis der Zahlendarstellung
+an.</li>
+<li>Da wir mit Binärdarstellungen fester Größe arbeiten können die
+Zahlen hinter dem Komma nicht dargestellt werden. Daher sind nur
+ganzzahlige Division möglich.</li>
 </ol>
-<p>In Assembly können wir also eine Multiplikation bzw. Division eines Registers mit einem Wert der Form <span class="math inline">\(2^n\)</span> als <span class="math inline">\(n\)</span>-Fachen-Shift implementieren:</p>
+<p>In Assembly können wir also eine Multiplikation bzw. Division eines
+Registers mit einem Wert der Form <span
+class="math inline">\(2^n\)</span> als <span
+class="math inline">\(n\)</span>-Fachen-Shift implementieren:</p>
 <pre><code>shl rax, 1 ; rax = rax*2
 shl rax, 2 ; rax = rax*4
 
@@ -624,29 +908,49 @@ shr rax, 1 ; rax = rax/2 (ganzzahlig)
 shr rax, 2 ; rax = rax/4 (ganzzahlig)</code></pre>
 <h1 id="ssh-and-working-on-andorra">SSH and working on Andorra</h1>
 <h2 id="verbinden">Verbinden</h2>
-<p>Als Referenzsystem für unseren Code nutzen wir die Linux-Debian-Systeme an unserer Uni. Auf diese können wir über eine SSH Verbindung zugreifen.</p>
-<p>Um eine Verbindung mit den Andorra-System aufzunehmen öffnet ihr eine Command-Line und initiiert die Verbindung über SSH:</p>
+<p>Als Referenzsystem für unseren Code nutzen wir die
+Linux-Debian-Systeme an unserer Uni. Auf diese können wir über eine SSH
+Verbindung zugreifen.</p>
+<p>Um eine Verbindung mit den Andorra-System aufzunehmen öffnet ihr eine
+Command-Line und initiiert die Verbindung über SSH:</p>
 <pre><code>$ ssh ZEDAT_USER_NAME@andorra.imp.fu-berlin.de</code></pre>
-<p>Ähnlich funktioniert dies auch für die anderen Remote-Systeme der Uni: http://www.mi.fu-berlin.de/w/IT/ItServicesTerminalserver</p>
+<p>Ähnlich funktioniert dies auch für die anderen Remote-Systeme der
+Uni: http://www.mi.fu-berlin.de/w/IT/ItServicesTerminalserver</p>
 <h2 id="copying-files-sshscp">Copying files (SSH/SCP)</h2>
-<p>Um Dateien von eurem System auf die Remotesysteme der Universität zu bekommen kann man das auf SSH basierende SCP (Secure-Copy-Protocol) nutzen.</p>
+<p>Um Dateien von eurem System auf die Remotesysteme der Universität zu
+bekommen kann man das auf SSH basierende SCP (Secure-Copy-Protocol)
+nutzen.</p>
 <pre><code>$ scp PATH_TO_FILE ZEDAT_USER_NAME@andorra.imp.fu-berlin.de:DESTINATION_PATH</code></pre>
 <h1 id="how-to-compile">How-To-Compile:</h1>
-<p>Wir stellen euch zu (fast) jeder Assembly-Aufgabe einen C-Wrapper zur Verfügung. Keine Sorge, den müsst ihr noch nicht verstehen.</p>
-<p>Da Assembly eine menschenlesbare Version von Maschinen-Code ist muss diese zunächst Compiled/Übersetzt werden. Dazu erstellt ihr zunächst mit Hilfe von NASM eine Objekt-Datei (<code>.o</code>) aus eurem Assembly-Code:</p>
+<p>Wir stellen euch zu (fast) jeder Assembly-Aufgabe einen C-Wrapper zur
+Verfügung. Keine Sorge, den müsst ihr noch nicht verstehen.</p>
+<p>Da Assembly eine menschenlesbare Version von Maschinen-Code ist muss
+diese zunächst Compiled/Übersetzt werden. Dazu erstellt ihr zunächst mit
+Hilfe von NASM eine Objekt-Datei (<code>.o</code>) aus eurem
+Assembly-Code:</p>
 <pre><code>$ nasm -f elf64 -o PROGRAMM_NAME.o PROGRAMM_NAME.asm</code></pre>
-<p>Die Flag &quot;-f elf64&quot; teilt NASM mit, dass die Ausgabe für x64 Linux Übersetzt werden soll.</p>
-<p>Nun müsst ihr auch den C-Wrapper compilieren und eine weitere Objektdatei erzeugen:</p>
+<p>Die Flag “-f elf64” teilt NASM mit, dass die Ausgabe für x64 Linux
+Übersetzt werden soll.</p>
+<p>Nun müsst ihr auch den C-Wrapper compilieren und eine weitere
+Objektdatei erzeugen:</p>
 <pre><code>$ c99 -O2 -c -o PROGRAMM_NAME_wrapper.o PROGRAMM_NAME_wrapper.c</code></pre>
-<p>Die Flag <code>-O2</code> teilt unserem Compiler mit, dass wir die Optimierungsstufe 2 nutzen wollen (automatische Optimierung unseres C-Codes). Diese <em>müsst</em> ihr angeben, da dies Implikationen für euren Code hat.</p>
-<p>Anschließend müssen wir noch beide Objektdateien zu einer <strong>ausführbaren Datei</strong> verlinken:</p>
+<p>Die Flag <code>-O2</code> teilt unserem Compiler mit, dass wir die
+Optimierungsstufe 2 nutzen wollen (automatische Optimierung unseres
+C-Codes). Diese <em>müsst</em> ihr angeben, da dies Implikationen für
+euren Code hat.</p>
+<p>Anschließend müssen wir noch beide Objektdateien zu einer
+<strong>ausführbaren Datei</strong> verlinken:</p>
 <pre><code>$ c99 -o PROGRAMM_NAME PROGRAMM_NAME_wrapper.o PROGRAMM_NAME.o</code></pre>
-<p>Abschließend solltet ihr eine Datei mit dem Namen &quot;PROGRAMM_NAME&quot; besitzen. Diese könnt ihr wie folgt ausführen:</p>
+<p>Abschließend solltet ihr eine Datei mit dem Namen “PROGRAMM_NAME”
+besitzen. Diese könnt ihr wie folgt ausführen:</p>
 <pre><code>$ ./PROGRAMM_NAMME [parameter 1] [parameter 2] [parameter 3] ...</code></pre>
 <p>Alternativ könnt ihr auch einfach die gegebene MAKEFILE nutzen</p>
 <pre><code>$ make</code></pre>
 <h1 id="debugging-mit-gdb">Debugging mit GDB:</h1>
-<p>Um Einblick in die Ausführung des ASM-Codes zu bekommen kann man <code>gdb</code> verwenden. Hierzu findet ihr eine kleine Zusammenfassung von Befehlen zur Ausführung des <code>gdb</code> mit einer Terminal &quot;UI&quot;:</p>
+<p>Um Einblick in die Ausführung des ASM-Codes zu bekommen kann man
+<code>gdb</code> verwenden. Hierzu findet ihr eine kleine
+Zusammenfassung von Befehlen zur Ausführung des <code>gdb</code> mit
+einer Terminal “UI”:</p>
 <pre><code>$ gdb PROGRAMM_NAME                 Lade deinen code in gdb
 gdb&gt; break SOME_LABEL_IN_YOUR_CODE  Setze einen &quot;Breakpoint&quot; bei dem dein Programm hält
 gdb&gt; tui enable                     Aktiviere die UI
@@ -662,6 +966,8 @@ $</code></pre>
 <li>https://en.wikibooks.org/wiki/X86_Assembly/X86_Architecture</li>
 <li>https://en.wikipedia.org/wiki/X86_calling_conventions</li>
 <li>https://stackoverflow.com/questions/18024672/what-registers-are-preserved-through-a-linux-x86-64-function-call</li>
+<li>https://www.cs.uaf.edu/2017/fall/cs301/reference/x86_64.html</li>
+<li>https://cs61.seas.harvard.edu/site/2018/Asm1/</li>
 </ul>
 </body>
 </html>
