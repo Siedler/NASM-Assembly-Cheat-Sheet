@@ -366,8 +366,7 @@ Das Ergebnis wird verworfen, jedoch werden folgende Flags gesetzt:
 
 * `sf`: signed flag, gibt an ob es sich um eine negative Zahl handelt,
 * `zf`: zero flag, gibt an ob das Ergebnis die Zahl 0 repräsentiert,
-* `pf`: parity flag, gibt an ob das Ergebnis gerade/ungerade ist, also gdw.,
-      ob das letzte Bit gesetzt ist.
+* `pf`: parity flag, gibt an ob die Anzahl an gesetzten Bits im niedrigsten Byte gerade ist. 
 
 Anmerkungen:
 
