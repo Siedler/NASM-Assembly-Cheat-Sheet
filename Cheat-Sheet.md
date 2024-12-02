@@ -385,7 +385,9 @@ Assembly Instruktionen um auf diesen direkt zuzugreifen.
 Zusätzlich werden zwei Werte vorgehalten: der (Stack-)Base-Pointer
 (oder Frame-Pointer) und der Stack-Pointer.
 Der Base-Pointer zeigt immer auf den Beginn des Stacks währenddessen der
-Stack-Pointer auf die nächste freie Adresse zeigt.
+Stack-Pointer auf die nächste belegte Adresse zeigt. 
+Der Stack wächst, wenn `rsp` kleiner wird. Daher "wächst" der Stack nach 
+unten. (Der Stack ist "full descending".)
 
 WICHTIG: nach dem Funktionsaufruf (also vor dem ret Befehl)
 muss der Stack-Pointer wieder auf der selben Stelle sein wie zu Beginn des
