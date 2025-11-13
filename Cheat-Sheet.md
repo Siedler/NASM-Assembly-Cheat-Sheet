@@ -97,6 +97,34 @@ weiteren Funktionsaufruf behalten, müssen wir sie manuell vor dem Aufruf sicher
 | r8-r11   | X        |              |
 | r12-r15  |          | X            |
 
+# Befehle (Übersicht)
+
+Notation: reg = Register (`rax`, ...), imm = Immediate (idR. eine Zahl)
+
+| Befehl | Arg1  | Arg2     | Bedeutung                   |
+|--------|-------|----------|-----------------------------|
+| [mov](#mov-reg-to-value--mov-reg-to-reg-from) | reg1  | reg2/imm | reg1 = reg2/imm |
+| |
+| [add](#add-reg1-value--add-reg1-reg2)         | reg1  | reg2/imm | reg1 = reg1 + reg2/imm |
+| [sub](#sub-reg1-value--sub-reg1-reg2)         | reg1  | reg2/imm | reg1 = reg1 - reg2/imm |
+| [neg](#neg-reg1)                              | reg1  |          | reg1 = -reg1 (2er Komplement) |
+| [mul](#mul-reg1)                              | reg1  |          | `rdx:rax` = `rax` * reg1 (unsigned) |
+| [div](#div-reg1)                              | reg1  |          | `rax` = `rdx:rax` / reg1 (Rest in `rdx`) |
+| [imul](#imul-reg1-und-idiv-reg1)              | reg1  |          | `rdx:rax` = `rax` * reg1 (signed) |
+| [idiv](#imul-reg1-und-idiv-reg1)              | reg1  |          | `rax` = `rdx:rax` / reg1 (Rest in `rdx`) |
+| |
+| [and](#and-reg1-value--and-reg1-reg2)         | reg1  | reg2/imm | reg1 = reg1 & reg2/imm |
+| [or](#or-reg1-value--or-reg1-reg2)            | reg1  | reg2/imm | reg1 = reg1 \| reg2/imm |
+| [xor](#xor-reg1-value--xor-reg1-reg2)         | reg1  | reg2/imm | reg1 = reg1 ^ reg2/imm |
+| [not](#not-reg1)                              | reg1  |          | reg1 = ~reg1 |
+| [shl](#shl-reg1-value--shl-reg1-cl)           | reg1  | `cl`/imm | reg1 = reg1 << `cl`/imm |
+| [shr](#shr-reg1-value--shr-reg1-cl)           | reg1  | `cl`/imm | reg1 = reg1 >> `cl`/imm |
+| |
+| [cmp](#cmp-reg1-value--cmp-reg1-reg2)         | reg1  | reg2/imm | reg1 - reg2/imm (setzt nur `rflags`) |
+| [test](#test-reg1-value--test-reg1-reg2)      | reg1  | reg2/imm | reg1 ^ reg2/imm (setzt nur `rflags`) |
+| [jmp](#jmp-some_label)                        | label |          | Sprung zu label (`rip` = addr of label) |
+| [j*X*](#jx-some_label)                        | label |          | Bedingter Sprung (nur wenn Bedingung erfüllt) |
+
 
 # Befehle
 
@@ -108,83 +136,100 @@ Verschiebe ein Wert bzw. den Wert eines Registers in ein weiteres Register.
 
 Beispiel:
 
-	mov rax, rdx ; Verschiebe Wert von rdx in rax (ergo rax = rdx)
-	mov rsi, 2   ; Verschiebe die Zahl 2 in das Register rsi (ergo rsi = 2)
+```nasm
+mov rax, rdx ; Verschiebe Wert von rdx in rax (ergo rax = rdx)
+mov rsi, 2   ; Verschiebe die Zahl 2 in das Register rsi (ergo rsi = 2)
+```
 
-### shl reg (value 1), value / shl reg (value 1), cl
+## Arithmetische-Operationen:
+
+### add reg1, value / add reg1, reg2:
 Definition:
-Shifte den Wert des Registers um $n$ Stellen nach Links.
-Bits die nach Links "rausgeschoben" werden gehen verloren
+Addiere einen Wert bzw. den Wert eines Registers auf den Wert eines anderen
+Registers.
 
 Beispiel:
 
-	shl rax, cl ; Verschiebe alle Bits von rax um n-Stellen (Entsprechend des Wertes aus cl)
-	shl rax, 1   ; Verschiebe alle Bits
+```nasm
+add rax, rdx ; Addiere Wert von rdx auf rax und Speicher Ergebnis in rax (rax = rax + rdx)
+add rsi, 2   ; Addiere die Zahl 2 auf rsi und Speicher Ergebnis in rsi (rsi = rsi + 2)
+```
 
-Beispiel under the hood:
-
-	rax = 1100 0011
-
-	shl rax, 1
-
-	=> rax = 1000 0110
-
-ACHTUNG: Sowohl shr, als auch shl nutzen können nur das Register `cl` als
-Registerverschiebungswert nehmen!
-Dies ist dadurch begründet, dass bei der Entwicklung eines x86-Chips nur eine
-Verbindung des Count-Registers (`cl`) angelegt wurde für Verschiebungen.
-
-### shr reg (value 1), value / shr reg (value 1), cl
+### sub reg1, value / sub reg1, reg2:
 Definition:
-Shifte den Wert des Registers um n Stellen nach Rechts. Also analog zu `shl`.
+Analog zu `add` jedoch als Subtraktion
+
+Beispiele:
+
+```nasm
+sub rax, rdx ; Subtrahiere von rax den Wert von rdx und speichere das Ergebnis in rax (rax = rax - rdx)
+sub rsi, 2   ; Subtrahiere von rsi den Wert 2 (rsi = rsi - 2)
+```
+
+### neg reg1:
+Definition:
+Negiere den Wert aus dem gegebenen Register (in 2er Komplement).
 
 Beispiel:
 
-	shr rax, cl
-	shr rax, 1
+```nasm
+neg rsi ; Negiere den Wert in rsi
+```
 
-ACHTUNG: Sowohl `shr`, als auch `shl` können nur das Register `cl` als
-Registerverschiebungswert nutzen!
-Bei der Entwicklung der x86-Chips wurde nur eine Verbindung des Count-Registers
-(`cl`) für Verschiebungen angelegt.
-
-### rol reg (value 1), value / rol reg (value 1), reg (value 2)
-Definition: Rotiere die Werte um $n$ Stellen.
-Dies ist Analog zu shl jedoch gehen hier die Bits die nach links raus
-geschoben werden nicht verloren, sondern werden rechts hinzugefügt.
+### mul reg1:
+Definition:
+Multipliziere den Wert in Register `rax` mit dem Wert des angegebenen Registers. Das Ergebnis wird in die **beiden (!!!)** Registern `rax` und `rdx` gespeichert (`rdx`, falls ein Überlauf der Zahl in `rax` passiert)
 
 Beispiel:
 
-	rol rax, rdx
-	rol rax, 1
+```nasm
+mul rsi ; Multipliziere den Wert in rax mit dem Wert aus rsi und speichere das Ergebnis in (rdx) rax
+```
 
-Beispiel under the hood:
+ACHTUNG: Dieser Befehl kann nicht mit einem Wert genutzt werden. Falls man das Register `rax` mit einem bestimmten Wert multiplizieren möchte muss man diesen vorher in ein Register verschieben:
 
-	rax = 1100 0100
+```nasm
+mov rsi, 3
+mul rsi    ; Multipliziere rax mit 3
+```
 
-	rol rax, 1
-	=> rax = 1000 1001
-
-
-### ror reg (value 1), value / ror reg (value 1), reg (value 2)
-Definition: Rotiere die Werte um $n$ Stellen nach Rechts. Also analog zu `rol`
+### div reg1:
+Definition:
+Dividiere den Wert aus `rdx:rax` (`rdx` konkateniert mit `rax`) durch den Wert aus dem angegebenen Register. Ergebnis wird in `rax` (ganzzahlige Division) und `rdx` (Rest) gespeichert
 
 Beispiel:
 
-	ror rax, rdx
-	ror rax, 1
+```nasm
+div rsi ; Dividiert rdx:rax durch den Wert in rsi. Rest wird in rdx gespeichert und Wert der ganzzahligen Division in rax
+```
+
+ACHTUNG: Der Divisor ist nicht nur `rax`, sondern `rdx:rax`.
+Also aufpassen, dass nicht ungewollt noch was in `rdx` steht.
+Übliches Muster:
+
+```nasm
+mov rsi, 3
+mov rdx, 0 ; Sicherstellen, dass obere 64 Bit des Divisors 0 sind
+div rsi    ; Dividiere rax durch 3
+```
+
+### imul reg1 und idiv reg1:
+Definition:
+Analog zu `mul`/`div`, aber mit signed Zahlen (d.h. Zahlen mit Vorzeichen)
 
 ## Bit-Operationen:
 
-### and reg (value 1), value / and reg (value 1), reg (value 2)
+### and reg1, value / and reg1, reg2
 Definition:
 Wendet das logische UND ($\land$) mit dem Wert des zweiten Parameters auf den
 Wert des ersten Registers an und speichert das Ergebnis im ersten Register.
 
 Beispiel:
 
-	and rax, rsi ; Verunde den Wert aus rax mit dem Wert aus rsi
-	and rax, 0x1 ; Verunde den Wert aus rax mit dem Wert 0x1 (Hexadezimal-Zahl)
+```nasm
+and rax, rsi ; Verunde den Wert aus rax mit dem Wert aus rsi
+and rax, 0x1 ; Verunde den Wert aus rax mit dem Wert 0x1 (Hexadezimal-Zahl)
+```
 
 Beispiel under the hood:
 
@@ -198,15 +243,17 @@ Beispiel under the hood:
 	---------
 	0001 1001 = rax
 
-### or reg (value 1), value / or reg (value 1), reg (value 2)
+### or reg1, value / or reg1, reg2
 Definition:
 Wende das logische ODER ($\lor$) mit dem Wert des zweiten Parameters auf das
 erste Register an und speichert das Ergebnis im ersten Register.
 
 Beispiel:
 
-	or rax, rsi ; Veroder den Wert aus rax mit dem Wert aus rsi
-	or rdx, 0xf ; Veroder den Wert aus rdx mit dem Wert 0xf (Binär = 1111)
+```nasm
+or rax, rsi ; Veroder den Wert aus rax mit dem Wert aus rsi
+or rdx, 0xf ; Veroder den Wert aus rdx mit dem Wert 0xf (Binär = 1111)
+```
 
 Beispiel under the hood:
 
@@ -220,15 +267,17 @@ Beispiel under the hood:
 	---------
 	0011 1101 = rdx
 
-### xor reg (value 1), value / xor reg (value 1), reg (value 2):
+### xor reg1, value / xor reg1, reg2:
 Definition:
 Wendet das logische XOR ($\oplus$) mit dem Wert des zweiten Parameters auf den
 Wert des ersten Registers an.
 
 Beispiel:
 
-	xor rax, rsi  ; Wendet XOR auf den Wert von rax mit dem Wert von rsi an
-	xor rdx, 0x8f ; Wendet XOR auf den Wert von rdx mit 0x8f (Binär = 1000 1111) an
+```nasm
+xor rax, rsi  ; Wendet XOR auf den Wert von rax mit dem Wert von rsi an
+xor rdx, 0x8f ; Wendet XOR auf den Wert von rdx mit 0x8f (Binär = 1000 1111) an
+```
 
 Beispiel under the hood:
 
@@ -242,76 +291,101 @@ Beispiel under the hood:
 	---------
 	0000 1011 = rdx
 
-## Arithmetische-Operationen:
-
-### neg reg (value 1):
+### not reg1:
 Definition:
-Negiere den Wert aus dem gegebenen Register (in 2er Komplement).
+Invertiert den Wert im ersten Register (alle 0en werden zu 1en und umgekehrt).
 
 Beispiel:
 
-	neg rsi ; Negiere den Wert in rsi
+```nasm
+; rdx = 0011 1011
+neg rdx
+; rdx = 1100 0100
+```
 
-### add reg (value 1), value / add reg (value 1), reg (value 2):
+### shl reg1, value / shl reg1, cl
 Definition:
-Addiere einen Wert bzw. den Wert eines Registers auf den Wert eines anderen
-Registers.
+Shifte den Wert des Registers um $n$ Stellen nach Links.
+Bits die nach Links "rausgeschoben" werden gehen verloren
 
 Beispiel:
 
-	add rax, rdx ; Addiere Wert von rdx auf rax und Speicher Ergebnis in rax (rax = rax + rdx)
-	add rsi, 2   ; Addiere die Zahl 2 auf rsi und Speicher Ergebnis in rsi (rsi = rsi + 2)
+```nasm
+shl rax, cl ; Verschiebe alle Bits von rax um n-Stellen (Entsprechend des Wertes aus cl)
+shl rax, 1   ; Verschiebe alle Bits
+```
 
-### sub reg (value 1), value / sub reg (value 1), reg (value 2):
+Beispiel under the hood:
+
+	rax = 1100 0011
+
+	shl rax, 1
+
+	=> rax = 1000 0110
+
+ACHTUNG: Sowohl `shr`, als auch `shl` nutzen können nur das Register `cl` als
+Registerverschiebungswert nehmen!
+Dies ist dadurch begründet, dass bei der Entwicklung eines x86-Chips nur eine
+Verbindung des Count-Registers (`cl`) angelegt wurde für Verschiebungen.
+
+### shr reg1, value / shr reg1, cl
 Definition:
-Analog zu `add` jedoch als Subtraktion
-
-Beispiele:
-
-	sub rax, rdx ; Subtrahiere von rax den Wert von rdx und speichere das Ergebnis in rax (rax = rax - rdx)
-	sub rsi, 2   ; Subtrahiere von rsi den Wert 2 (rsi = rsi - 2)
-
-### mul reg (value 1):
-Definition:
-Multipliziere den Wert in Register rax mit dem Wert des angegebenen Registers. Das Ergebnis wird in die *beiden (!!!)* Register rax und rdx gespeichert (rdx, falls ein Überlauf der Zahl in rax passiert)
+Shifte den Wert des Registers um n Stellen nach Rechts. Also analog zu `shl`.
 
 Beispiel:
 
-	mul rsi ; Multipliziere den Wert in rax mit dem Wert aus rsi und speichere das Ergebnis in (rdx) rax
+```nasm
+shr rax, cl
+shr rax, 1
+```
 
-ACHTUNG: Dieser Befehl kann nicht mit einem Wert genutzt werden. Falls man das Register rax mit einem bestimmten Wert multiplizieren möchte muss man diesen vorher in ein Register verschieben:
+ACHTUNG: Sowohl `shr`, als auch `shl` können nur das Register `cl` als
+Registerverschiebungswert nutzen!
+Bei der Entwicklung der x86-Chips wurde nur eine Verbindung des Count-Registers
+(`cl`) für Verschiebungen angelegt.
 
-	mov rsi, 3
-	mul rsi    ; Multipliziere rax mit 3
-
-### div reg (value 1):
-Definition:
-Dividiere den Wert aus rdx:rax (rdx konkateniert mit rax) durch den Wert aus dem angegebenen Register. Ergebnis wird in rax (ganzzahlige Division) und rdx (Rest) gespeichert
+### rol reg1, value / rol reg1, reg2
+Definition: Rotiere die Werte um $n$ Stellen.
+Dies ist Analog zu shl jedoch gehen hier die Bits die nach links raus
+geschoben werden nicht verloren, sondern werden rechts hinzugefügt.
 
 Beispiel:
 
-	div rsi ; Dividiert rdx:rax durch den Wert in rsi. Rest wird in rdx gespeichert und Wert der ganzzahligen Division in rax
+```nasm
+rol rax, rdx
+rol rax, 1
+```
 
-ACHTUNG: Prüfe vor der Division, ob der Wert, der sich in rdx befindet,
-korrekt ist.
-Dort könnte sich 1. ein Wert befinden, der nichts mit der gewollten Rechnung zu
-tun hat und 2. ein Wert drin befinden der nach der Division erhalten bleiben
-sollte.
+Beispiel under the hood:
 
-### imul reg (value 1) und idiv reg (value 1):
-Definition:
-Analog zu mul/div, aber mit signed Zahlen (d.h. Zahlen mit Vorzeichen)
+	rax = 1100 0100
+
+	rol rax, 1
+	=> rax = 1000 1001
+
+
+### ror reg1, value / ror reg1, reg2
+Definition: Rotiere die Werte um $n$ Stellen nach Rechts. Also analog zu `rol`
+
+Beispiel:
+
+```nasm
+ror rax, rdx
+ror rax, 1
+```
 
 ## Vergleiche/Sprünge und Bedinge Sprünge:
 
-### cmp reg (value 1), value / cmp reg (value 1), reg (value 2):
+### cmp reg1, value / cmp reg1, reg2:
 Definition:
 Vergleiche ein Register mit einem Wert bzw. mit dem Wert eines weiteren Registers. Diese Operation setzt Bits im Flag-Register die später für Bedingte-Sprünge verwendet werden könnten
 
 Beispiel:
 
-	cmp rax, rsi ; Vergleiche rax mit dem Wert aus rsi
-	cmp rax, 2   ; Vergleiche rax mit dem Wert 2
+```nasm
+cmp rax, rsi ; Vergleiche rax mit dem Wert aus rsi
+cmp rax, 2   ; Vergleiche rax mit dem Wert 2
+```
 
 ### jmp some_label:
 Definition: Setze den Programm Counter (PC, bzw. `rip`) auf die Adresse des
@@ -321,22 +395,26 @@ An Stelle eines Labels kann auch direkt eine Zahl als Adresse genutzt werden
 
 Beispiel:
 
-	; [...]
-	jmp .some_label
-	; [...]
+```nasm
+; [...]
+jmp .some_label
+; [...]
 
-	.some_label:
-	; [Do something]
+.some_label:
+; [Do something]
+```
 
 
-### jl some_label / jb some_label / jg some_label / ja some_label / je some_label / jne some_label ...
+### j*X* some_label:
+(*X* wird durch eine von vielen Bezeichnungen ersetzt: `je`, `jne`, ...)
+
 Definition:
 Springe, wenn bestimmte Bits im Flag-Register gesetzt sind.
 Dies wird in der Regel in Kombination mit einer Vergleich-Operation genutzt,
 um diese Bits zu setzen.
 
 | Sprung Bezeichnung   | Bedeutung |
-|--------------------- |---------- |
+|----------------------|-----------|
 | `je`                 | "Jump equal"     -- Springe, wenn der Vergleich ergeben hat, dass die Werte die selben sind |
 | `jne`                | "Jump not equal" -- Springe, wenn der Vergleich ergeben hat, dass die Werte ungleich sind |
 | `jb`                 | "Jump below"     -- Springe wenn $\text{reg1} < \text{reg2}$ oder $\text{reg1} < \text{value}$ (unsigned number) |
@@ -349,16 +427,18 @@ um diese Bits zu setzen.
 
 Beispiele:
 
-	; [...]
-	cmp rax, 2
-	jl .some_label
-	; execute here if rax >= 2
-	; [...]
+```nasm
+; [...]
+cmp rax, 2
+jl .some_label
+; execute here if rax >= 2
+; [...]
 
-	.some_label:
-	; execute here if rax < 2
+.some_label:
+; execute here if rax < 2
+```
 
-### test reg (value 1), value / test reg (value 1), reg (value 2):
+### test reg1, value / test reg1, reg2:
 Definition:
 Führt ein logisches UND ($\land$) auf das erste Register mit dem Wert des
 zweiten Registers bzw. dem angegebenen Wert aus.
@@ -389,7 +469,7 @@ Stack-Pointer auf die nächste belegte Adresse zeigt.
 Der Stack wächst, wenn `rsp` kleiner wird. Daher "wächst" der Stack nach 
 unten. (Der Stack ist "full descending".)
 
-WICHTIG: nach dem Funktionsaufruf (also vor dem ret Befehl)
+WICHTIG: nach dem Funktionsaufruf (also vor dem `ret` Befehl)
 muss der Stack-Pointer wieder auf der selben Stelle sein wie zu Beginn des
 Funktionsaufrufs!
 
@@ -401,9 +481,11 @@ aktualisiert den Stack-Pointer.
 
 Beispiel:
 
-	push rax
-	push esi
-	push cl
+```nasm
+push rax
+push esi
+push cl
+```
 
 ### pop reg:
 Definition:
@@ -413,9 +495,11 @@ es in das jeweilige Register.
 
 Beispiel:
 
-	pop cl
-	pop esi
-	pop rax
+```nasm
+pop cl
+pop esi
+pop rax
+```
 
 WICHTIG: Es muss in umgekehrter Reigenfolge gepoppt werden wie die Elemente
 gepusht wurde. Dies ist der Fall wegen der LIFO-Struktur des Stacks!
@@ -436,15 +520,17 @@ Register sichern)
 
 Beispiel:
 
-	some_function:
-		...
-		call some_other_function
-		; ret der subroutine macht hier weiter
-		...
+```nasm
+some_function:
+	...
+	call some_other_function
+	; ret der subroutine macht hier weiter
+	...
 
-	some_other_function:
-		...
-		ret
+some_other_function:
+	...
+	ret
+```
 
 # Assembly-Tricks:
 
@@ -452,7 +538,9 @@ Beispiel:
 Um den Wert eines Registers auf 0 zu setzen könnt ihr einfach die Zahl 0 in das
 jeweilige Register setzen:
 
-	mov rax, 0 ; Setze rax = 0
+```nasm
+mov rax, 0 ; Setze rax = 0
+```
 
 Optional hierzu könnt ihr die `xor`-Instruktion nutzen.
 Da XOR ein gegebenen Bit auf 0 setzt, gdw. beide Register-Einträge 0 sind,
@@ -461,7 +549,9 @@ dass ein XOR mit dem selben Wert das jeweilige Register auf 0 setzen wird.
 Dies hat also den selben Effekt wie ein `mov` Befehl und *kann* unter Umständen
 effizienter sein (konkret ist die Codierungslänge kürzer).
 
-	xor rax, rax ; Setze rax = 0
+```nasm
+xor rax, rax ; Setze rax = 0
+```
 
 	e.g rax = 1101 1111
 
@@ -477,29 +567,29 @@ Die Multiplikation bzw. die Division einer Zahl der Basis $b$ mit einer Zahl
 der Form $b^n$ kann als einfache "Verschiebung" um $n$ Stellen betrachtet werden.
 Gucken wir uns dies zuerst im Dezimalsystem mit 10-er Potenzen an:
 
-\begin{align*}
+$$\begin{align*}
 	12 \cdot 10^1 &= 12 \cdot 10   &&= 120 \\
 	12 \cdot 10^2 &= 12 \cdot 100  &&= 1200 \\
 	12 \cdot 10^3 &= 12 \cdot 1000 &&= 12000
-\end{align*}
+\end{align*}$$
 
-\begin{align*}
+$$\begin{align*}
 	12 \div 10^1 &= 12 \div 10   &&= 1.2 \\
 	12 \div 10^2 &= 12 \div 100  &&= 0.12 \\
 	12 \div 10^3 &= 12 \div 1000 &&= 0.012
-\end{align*}
+\end{align*}$$
 
 Im Binärsystem gilt dieses Prinzip natürlich auch:
 
-\begin{align*}
+$$\begin{align*}
 	0011_2 \cdot 2_{10}^1 &= 0011_2 \cdot 2_{10} &&= 0110_2 \\
 	0011_2 \cdot 2_{10}^2 &= 0011_2 \cdot 4_{10} &&= 1100_2
-\end{align*}
+\end{align*}$$
 
-\begin{align*}
+$$\begin{align*}
 	0011_2 \div 2_{10}^1 &= 0011_2 \div 2_{10} &&= 0001(.1000)_2 \\
 	0011_2 \div 2_{10}^2 &= 0011_2 \div 4_{10} &&= 0000(.1100)_2
-\end{align*}
+\end{align*}$$
 
 Hinweise:
 
@@ -510,11 +600,13 @@ Hinweise:
 In Assembly können wir also eine Multiplikation bzw. Division eines Registers
 mit einem Wert der Form $2^n$ als $n$-Fachen-Shift implementieren:
 
-	shl rax, 1 ; rax = rax*2
-	shl rax, 2 ; rax = rax*4
+```nasm
+shl rax, 1 ; rax = rax*2
+shl rax, 2 ; rax = rax*4
 
-	shr rax, 1 ; rax = rax/2 (ganzzahlig)
-	shr rax, 2 ; rax = rax/4 (ganzzahlig)
+shr rax, 1 ; rax = rax/2 (ganzzahlig)
+shr rax, 2 ; rax = rax/4 (ganzzahlig)
+```
 
 
 # SSH and working on Andorra
@@ -587,6 +679,7 @@ Hierzu findet ihr eine kleine Zusammenfassung von Befehlen zur Ausführung des
 	gdb> break SOME_LABEL_IN_YOUR_CODE	Setze einen "Breakpoint" bei dem dein Programm hält
 	gdb> tui enable 					Aktiviere die UI
 	gdb> layout asm						Zeige den Assembly-Code deines Programms
+	gdb> set disassembly-flavor intel   Syntax wie gewohnt darstellen (mov rax,0x0 statt mov $0x0,%rax)
 	gdb> layout regs					Zeige deine Register während des Programmlaufs
 	gdb> run							Starte Ausführung des Programms
 	gdb> ni								Next Instruction
@@ -601,3 +694,4 @@ Hierzu findet ihr eine kleine Zusammenfassung von Befehlen zur Ausführung des
 * https://stackoverflow.com/questions/18024672/what-registers-are-preserved-through-a-linux-x86-64-function-call
 * https://www.cs.uaf.edu/2017/fall/cs301/reference/x86_64.html
 * https://cs61.seas.harvard.edu/site/2018/Asm1/
+* https://www.felixcloutier.com/x86/ (all x86 instructions, including detailled description e.g. affected flags)
