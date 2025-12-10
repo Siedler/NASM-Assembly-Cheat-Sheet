@@ -194,9 +194,9 @@ Beispiel under the hood:
 	and rax, rsi = 0101 1101 and 1101 1011
 
 	0101 1101
-	1001 1011
+	1101 1011
 	---------
-	0001 1001 = rax
+	0101 1001 = rax
 
 ### or reg (value 1), value / or reg (value 1), reg (value 2)
 Definition:
